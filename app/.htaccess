@@ -1,0 +1,13 @@
+
+SetEnv wsgi_max_requests 10
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+<Files *>
+  Options -Indexes
+  AuthType WebAuth
+  require user btnewton gsparrow kzieba rerickso
+  satisfy any
+  order allow,deny
+</Files>

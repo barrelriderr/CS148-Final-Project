@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><?php echo View::$title; ?></title>
+    <meta charset="utf-8"></meta>
+    <meta content="Brandt Newton" name="author"></meta>
+    <meta content="" name="description"></meta>
+    <link media="screen" href="css/common_style.css" rel="stylesheet"></link>
+    <link rel="shortcut icon" href="res/boilerman.ico.png">
+    <?php echo View::$stylesheets; ?>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+    <?php echo View::$scripts; ?>
+    <!--[if lt IE 9]>/*<script src="//html5shim.googlecode.com/sin/trunk/html5.js"></script><![endif]-->
+</head>
+<div id="container">
+<div id="nav-block">
+<a href="index.php"><img id="logo" src="res/bit_comp.png" width="102" height="73"></a>
+<nav>
+    <ul>
+        <a href="stats.php"><li><img src="res/graph_icon.png" width="35" height="35"></li></a>
+        <a href="account.php"><li><img src="res/user_icon.png" width="35" height="35"></li></a>
+    </ul>
+</nav>
+</div>

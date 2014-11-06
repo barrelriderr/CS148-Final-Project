@@ -1,0 +1,23 @@
+<?php 
+View::$title = "Sign in";
+View::head();
+?>
+<body>
+<h1>SIGN IN</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+    <?php 
+         Controller::display_errors();
+
+        // Input
+        $input = User_Controller::$input;
+    ?>
+    <fieldset>
+        <input type="email" placeholder="email" name="email" value="<?php echo $input['email'] ?>"/><br>
+        <input type="password" placeholder="password" name="password" /><br>
+	</fieldset>
+    <fieldset>
+    	<a href="/register.php">Register</a>
+        <input type="submit" value="ENTER" id="enter-button"/>
+    </fieldset>
+</form>
+</body>

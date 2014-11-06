@@ -1,0 +1,46 @@
+# This is the error log for your site.
+# Write errors here by calling Logger::log_error()
+#
+#
+
+Test -@Saturday 1st of November 2014 01:32:50 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:13:12 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:13:54 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:25:14 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:25:39 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:25:57 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:26:18 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:26:47 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:29:24 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:29:55 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:29:58 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:30:13 AM
+Failed to connect. () -@Saturday 1st of November 2014 02:30:14 AM
+
+
+
+SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected -@Sunday 2nd of November 2014 03:41:33 PM
+SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected -@Sunday 2nd of November 2014 03:41:40 PM
+SQLSTATE[3D000]: Invalid catalog name: 1046 No database selected -@Sunday 2nd of November 2014 03:41:53 PM
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'email' cannot be null -@Sunday 2nd of November 2014 04:07:02 PM
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'email' cannot be null -@Sunday 2nd of November 2014 04:15:53 PM
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'email' cannot be null -@Sunday 2nd of November 2014 04:16:15 PM
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'email' cannot be null -@Sunday 2nd of November 2014 04:18:51 PM
+Blank error message -@Monday 3rd of November 2014 01:37:10 AM
+Blank error message -@Monday 3rd of November 2014 01:38:35 AM
+Blank error message -@Monday 3rd of November 2014 01:38:55 AM
+Blank error message -@Monday 3rd of November 2014 01:39:11 AM
+Blank error message -@Monday 3rd of November 2014 01:39:11 AM
+Blank error message -@Monday 3rd of November 2014 01:39:16 AM
+Blank error message -@Monday 3rd of November 2014 01:39:16 AM
+Blank error message -@Monday 3rd of November 2014 01:39:18 AM
+Blank error message -@Monday 3rd of November 2014 01:39:18 AM
+Blank error message -@Monday 3rd of November 2014 01:39:18 AM
+Blank error message -@Monday 3rd of November 2014 01:41:53 AM
+Blank error message -@Monday 3rd of November 2014 01:42:50 AM
+Blank error message -@Monday 3rd of November 2014 01:42:52 AM
+Blank error message -@Monday 3rd of November 2014 01:42:52 AM
+Blank error message -@Monday 3rd of November 2014 01:43:14 AM
+Blank error message -@Monday 3rd of November 2014 01:43:14 AM
+Blank error message -@Monday 3rd of November 2014 01:43:20 AM
+1414975400 -@Monday 3rd of November 2014 01:43:20 AM
