@@ -15,7 +15,7 @@
 	$database_host = '127.0.0.1';
 	$database_name = 'buildr';
 	$database_username = 'root';
-	$database_password = '';
+	$database_password = 'Gguest1998';
 }
 
 // Production Server Settings

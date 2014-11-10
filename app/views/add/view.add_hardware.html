@@ -1,0 +1,77 @@
+<?php
+View::$title = "Add Hardware -Hardware_Controller::$build_name";
+View::head();
+?>
+<body>
+<h1>ADD HARDWARE</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+    <p>Please enter the hardware information for the computer that you just registered.</p>
+    <?php 
+        // ERRORS
+        Controller::display_errors();
+
+        // Input
+        $input = Hardware_Controller::$input;
+    ?>
+    <fieldset>
+        <select name="CPU Make">
+            <option>CPU Make...</option>
+            <option <?php echo $input['make.AMD'];?>>AMD</option>
+            <option <?php echo $input['make.Intel'];?>>Intel</option>
+        </select><br>
+        <div id="amd_cpu_models">
+            <select name="amd_model">
+                <?php Hardware_Controller::get_amd_cpus() ?>
+            </select>
+        </div>
+        <div id="intel_cpu_models">
+            <select name="intel_model">
+                <?php Hardware_Controller::get_intel_cpus() ?>
+            </select>
+        </div>
+        <br>
+    </fieldset>
+    <fieldset>
+        <select name="GPU Make">
+            <option>GPU Make...</option>
+            <option <?php echo $input['make.AMD'];?>>AMD</option>
+            <option <?php echo $input['make.Nvidea'];?>>NVidia</option>
+            <option <?php echo $input['make.None'];?>>None</option>
+        </select><br>
+        <div id="amd_gpu_models">
+            <select name="amd_model">
+                <?php Hardware_Controller::get_amd_gpus() ?>
+            </select>
+        </div>
+        <div id="nvidia_gpu_models">
+            <select name="nvidia_model">
+                <?php Hardware_Controller::get_nvidia_gpus() ?>
+            </select>
+        </div>
+        <br>
+        <a id="add-button" href="">+</a></div>
+    </fieldset>
+    <fieldset>
+        <select>
+            <option>RAM Speed</option>
+            <option <?php echo $input['ram_speed.AMD'];?>>1600</option>
+            <option <?php echo $input['ram_speed.AMD'];?>>1800</option>
+            <option <?php echo $input['ram_speed.AMD'];?>>2400</option>
+        </select>
+        <select>
+            <option>RAM Size</option>
+            <option <?php echo $input['ram_size.1x4'];?>>1x4GB</option>
+            <option <?php echo $input['ram_size.2x4'];?>>2x4GB</option>
+            <option <?php echo $input['ram_size.4x4'];?>>4x4GB</option>
+            <option <?php echo $input['ram_size.1x8'];?>>1x8GB</option>
+            <option <?php echo $input['ram_size.2x8'];?>>2x8GB</option>
+            <option <?php echo $input['ram_size.4x8'];?>>4x8GB</option>
+            <option <?php echo $input['ram_size.1x16'];?>>1x16GB</option>
+            <option <?php echo $input['ram_size.2x16'];?>>2x16GB</option>
+        </select>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="FINISH" id="enter-button"/>
+    </fieldset>
+</form>
+</body>

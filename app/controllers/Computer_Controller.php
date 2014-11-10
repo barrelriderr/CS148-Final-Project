@@ -1,10 +1,8 @@
 <?php
 
-
-
 class Computer_Controller extends Controller{
 
-	public static $input;
+	public static $input = [];
 	private $PURPOSES_LIST;
 	private $COLORS_LIST;
 
@@ -22,7 +20,6 @@ class Computer_Controller extends Controller{
 			$color = trim(htmlentities($_POST['color']));
 			$purposes = $_POST['purposes'];
 
-
 			require("../app/models/Computer_Model.php");
 			$this->model = new Computer_Model();
 
@@ -35,14 +32,14 @@ class Computer_Controller extends Controller{
 				}
 			}
 
+			static::$input['name'] = $name;
+
 			if (strlen($description) > 60000) {
 				static::$error_messages['description'] = "Description is longer than 60 000 characters.";
 			}
-
-			var_dump($color);
-
 			
-			
+			static::$input['description'] = $description;
+
 			if ($color == $this->COLORS_LIST[0]) {
 				static::$error_messages['color'] = "Please select a build color.";
 			}else {
@@ -50,6 +47,7 @@ class Computer_Controller extends Controller{
 
 				foreach ($this->COLORS_LIST as $key => $valid_color) {
 					if ($valid_color == $color) {
+						static::$input['color.'.$color] = ' selected';
 						unset(static::$error_messages['color']);
 						break;
 					}
@@ -63,6 +61,7 @@ class Computer_Controller extends Controller{
 				foreach ($this->PURPOSES_LIST as $key => $value) {
 					foreach ($purposes as $purpose) {
 						if ($value == $purpose)
+							static::$input['purposes.'.$value] = " checked";
 							$purposes_value += $key;
 					}
 				}
@@ -72,51 +71,17 @@ class Computer_Controller extends Controller{
 
 			static::$input['name'] = $name;
 			static::$input['description'] = $description;
-			static::$input['color'] = $color;
-			static::$input['purposes'] = $purposes;
 
+			// Purposes and color are assigned in their respective validation loops.
 
 
 			if (count(static::$error_messages) == 0) {				
 
-				$user_id = $this->database->signin($email, $password);
+				echo "computer registered!";
 
-				if ($user_id) {
-					$_SESSION['user_id'] = intval($user_id);
-					$_SESSION['signed_in'] = time();
-					
-					View::redirect('account');
-				}else {
-					static::$error_messages['signin'] = "Invalid credentials";
-				}
+
 			}
 		}
-		View::make('add');
-	}
-
-	//Display HTML for check boxes with previous selections.
-	public static function display_purposes_input() {
-		$input = $purposes = $_POST['purposes'];
-		$counter = 0;
-		if !is_array($input)
-			$input = array($input);
-
-		foreach ($this->PURPOSES_LIST as $key => $purpose) {
-			echo '<input type="checkbox" name="purpose" value="'.$purpose.'"';
-			if $purpose == $input[$counter];
-				echo " checked>";
-			else
-				echo ">$purpose<br>\n";
-		}
-	}
-
-	public static function display_color_input() {
-		$input = static::$input['color'];
-		echo "<select name=\"color\">\n";
-		foreach ($this->COLORS_LIST as $color) {
-			echo "<option" . ($color == $input) ? " selected>" : ">";
-			echo $color."</option>\n";
-		}
-		echo "</select>\n";
+		View::make('add/add_build');
 	}
 }

@@ -12,7 +12,7 @@ class Model {
   			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
 			Logger::error("Failed to connect. $e->getMessage()");
-            Controller::redirect("error");
+            View::redirect("error");
         }
 	}
 

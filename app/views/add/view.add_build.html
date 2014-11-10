@@ -1,0 +1,41 @@
+<?php
+View::$title = "Add Computer";
+View::head();
+?>
+<body>
+<h1>ADD COMPUTER</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+    <?php 
+        // ERRORS
+        Controller::display_errors();
+
+        // Input
+        $input = Computer_Controller::$input;
+    ?>
+    <fieldset>
+        <input type="text" placeholder="Build Name" name="name" value="<?php echo $input['name'] ?>"/><br>
+        <textarea name="description" placeholder="Tell us the story of your computer..." rows="4" cols="45"><?php echo $input['description'] ?></textarea>
+    </fieldset>
+    <fieldset>
+        <select name="color">
+            <option>Build Color...</option>
+            <option <?php echo $input['color.Black'];?>>Black</option>
+            <option <?php echo $input['color.White'];?>>White</option>
+            <option <?php echo $input['color.Red'];?>>Red</option>
+            <option <?php echo $input['color.Blue'];?>>Blue</option>
+            <option <?php echo $input['color.Yellow'];?>>Yellow</option>
+            <option <?php echo $input['color.Green'];?>>Green</option>
+            <option <?php echo $input['color.Pink'];?>>Pink</option>
+            <option <?php echo $input['color.Grey'];?>>Grey</option>
+        </select><br>
+        Purpose:<br>
+        <input type="checkbox" name="purposes[]" value="video" <?php echo $input['purposes.video'];?>>Video editting<br>
+        <input type="checkbox" name="purposes[]" value="gaming" <?php echo $input['purposes.gaming'];?>>Gaming<br>
+        <input type="checkbox" name="purposes[]" value="school" <?php echo $input['purposes.school'];?>>School<br>
+        <input type="checkbox" name="purposes[]" value="work" <?php echo $input['purposes.work'];?>>Work<br>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="ADD" id="enter-button"/>
+    </fieldset>
+</form>
+</body>

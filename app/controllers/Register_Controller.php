@@ -56,8 +56,6 @@ class Register_Controller extends Controller{
 				$email = static::$input['email'];
 				$password = static::$input['password'];
 
-				echo $password;
-
 				$password = hash('sha256', $password);
 
 				if($this->database->insert_user($email, $password)) {
