@@ -1,10 +1,4 @@
 <?php
-// Config file for Database
-$config_path = "../../config/database_config.php";
-if (file_exists($config_path))
-	require $config_path;
-else
-	die("Please set a config file.");
 
 // Enable error logging
 require "../src/logger/Logger.php";

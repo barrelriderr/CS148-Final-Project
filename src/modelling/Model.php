@@ -7,11 +7,21 @@ class Model {
 	protected function __construct() {
 
 		try {
+			// Config file for Database
+			$config_path = "../../config/database_config.php";
+
+			if (file_exists($config_path)) {
+				require $config_path;
+			}else {
+				die("Please set a config file.");
+			}
+
   			$this->connection =  new PDO("mysql:host=$database_host;dbname=$database_name", $database_username, $database_password);
   			$this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		} catch (PDOException $e) {
+			echo $e->getMessage();
 			Logger::error("Failed to connect. $e->getMessage()");
-            View::redirect("error");
+            //View::redirect("error");
         }
 	}
 
