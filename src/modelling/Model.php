@@ -5,7 +5,6 @@ class Model {
 	protected $connection;
 
 	protected function __construct() {
-        require_once("../app/config/database_config.php");
 
 		try {
   			$this->connection =  new PDO("mysql:host=$database_host;dbname=$database_name", $database_username, $database_password);
