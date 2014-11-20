@@ -23,16 +23,17 @@ class Hardware_Model extends Model {
 		return $this->binary_query($query, $computer_specs);
 	}
 
-	public function get_build_name($computer_id) {
+	public function get_build($computer_id) {
 		$query = "SELECT 
-						name 
+						name,
+						cpu_id
 					FROM 
 						computers 
 					WHERE 
 						computer_id=?";
 		$results = $this->return_query($query, array($computer_id));
 
-		return $results[0]['name'];
+		return $results;
 	}
 
 	public function get_cpu_list($make) {
@@ -77,8 +78,17 @@ class Hardware_Model extends Model {
 						 	AND details.make LIKE ?
 			 		) AS cards 
 					GROUP BY model";
+					
+		$query = "SELECT 
+			 				gpus.gpu_id,
+			 				CONCAT(details.make, ' ', series, ' ', model) AS model 
+			 			FROM 
+			 				gpus, gpu_makers AS details 
+						 WHERE 
+						 	gpus.make LIKE details.maker_id 
+						 	AND details.make LIKE ?";
 
-		$results = $this->return_query($query, array($make, $make));
+		$results = $this->return_query($query, array($make));
 
 		return $results;
 	}

@@ -3,6 +3,9 @@
 class User_Controller extends Controller {
 
 	public static $input = array();
+	public static $computer_list = [];
+	public static $unfinished_computer_list = [];
+
 
 	public function sign_in() {
 
@@ -19,9 +22,9 @@ class User_Controller extends Controller {
 			
 			if (count(static::$error_messages) == 0) {
 				require("../app/models/User_Model.php");
-				$this->database = new User_Model();
+				$this->model = new User_Model();
 
-				$user_id = $this->database->signin($email, $password);
+				$user_id = $this->model->signin($email, $password);
 
 				if ($user_id) {
 					$_SESSION['user_id'] = intval($user_id);
@@ -45,8 +48,33 @@ class User_Controller extends Controller {
 
 	public function account() {
 		if (Controller::is_signed_in()) {
+
+			$user_id = Controller::get_user_id();
+
+			require("../app/models/User_Model.php");
+			$this->model = new User_Model();
+
+			static::$computer_list = $this->model->get_users_computers($user_id);
+
+			static::$unfinished_computer_list = $this->model->get_users_unfinished_computers($user_id);
+
 			View::make('user/account');
 		}
+	}
+
+	public static function make_computer_list($list) {
+		if($list == null)
+			return;
+
+		$html = "<ol>\n";
+
+		foreach ($list as $value) {
+			$html .= '<li><a href="add_hardware.php?bid='.$value['computer_id'].'">'.$value['name']."</a></li>\n";
+		}
+
+		$html .= "</ol>\n";
+
+		echo $html;
 	}
 
 }

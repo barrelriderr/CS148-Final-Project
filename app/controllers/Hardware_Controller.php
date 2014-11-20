@@ -4,6 +4,7 @@ class Hardware_Controller extends Controller{
 
 	public static $input = [];
 	public static $build_name = null;
+	public static $finished_build;
 	public static $build_id = null;
 	private $model;
 	private static $cpu_list = [];
@@ -32,7 +33,14 @@ class Hardware_Controller extends Controller{
 		// Get Build Name
 		if (isset($build_id)){
 			static::$build_id = $build_id;
-			static::$build_name = $this->model->get_build_name($build_id);
+			$results = $this->model->get_build($build_id);
+			static::$build_name = $results[0]['name'];
+
+			if ($results[0]['cpu_id'] == null) {
+				static::$finished_build = false;
+			}else {
+				static::$finished_build = true;
+			}
 		}
 
 		if (static::$build_name == null){
@@ -67,7 +75,9 @@ class Hardware_Controller extends Controller{
 					static::$input["gpu_model"] = $gpu_id;
 
 					$gpu_count = intval(trim(htmlentities($_POST["gpu_count"])));
-					static::$input["gpu_count"] = $gpu_count;
+					if ($gpu_count < 1 || $gpu_count > 4)
+						$gpu_count = 1;
+					static::$input["gpu_count.$gpu_count"] = "checked";
 				}
 
 				// RAM VALIDATION

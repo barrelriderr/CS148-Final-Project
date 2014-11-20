@@ -5,9 +5,16 @@ View::head();
 <body>
 <h1>Account</h1>
 <article>
+<?php echo ($_GET['success'] == 1) ? '<div id="success">Success!</div>' : ""?>
 <ol>
 	<li><a href="signout.php">Sign out</a></li>
-	<li><a href="add_computer.php">Add Computer</a></li>
 </ol>
+<h3>Your Computers <a href="add_computer.php">+</a></h3>
+<?php User_Controller::make_computer_list(User_Controller::$computer_list); ?>
+
+<?php echo (User_Controller::$unfinished_computer_list != null) ? "<h3>Unfinished Computers</h3>" : "";
+	User_Controller::make_computer_list(User_Controller::$unfinished_computer_list);
+ ?>
+
 </article>
 </body>

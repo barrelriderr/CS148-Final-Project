@@ -2,7 +2,7 @@
 View::$title = "Add Hardware -".Hardware_Controller::$build_name;
 View::head();
 ?>
-<h1>ADD HARDWARE</h1>
+<h1><?php echo (Hardware_Controller::$finished_build) ? "UPDATE" : "ADD"?> HARDWARE</h1>
 <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?bid=".Hardware_Controller::$build_id ?>" method="POST">
 
 
@@ -42,12 +42,10 @@ View::head();
         <select name="2_gpu" id="alt_gpu">
             <?php Hardware_Controller::make_gpu_list("Nvidia") ?>
         </select>
-        <select name="gpu_count" id="gpu_count">
-            <option <?php echo $input['gpu_count1'];?>>1</option>
-            <option <?php echo $input['gpu_count2'];?>>2</option>
-            <option <?php echo $input['gpu_count3'];?>>3</option>
-            <option <?php echo $input['gpu_count4'];?>>4</option>
-        </select><br>
+        <span class="gpu_count"><input type="radio" name="gpu_count" class="gpu_count" value="1" <?php echo $input['gpu_count.1']?>>1</span>
+        <span class="gpu_count"><input type="radio" name="gpu_count" class="gpu_count" value="2" <?php echo $input['gpu_count.2']?>>2</span>
+        <span class="gpu_count"><input type="radio" name="gpu_count" class="gpu_count" value="3" <?php echo $input['gpu_count.3']?>>3</span>
+        <span class="gpu_count"><input type="radio" name="gpu_count" class="gpu_count" value="4" <?php echo $input['gpu_count.4']?>>4</span>
     </fieldset>
     <fieldset>
     <legend>RAM</legend>
@@ -72,14 +70,14 @@ View::head();
         make = parseInt($("#"+target).val());
         
         if(target == "gpu"){
-            $("#"+target+"_count").show();
+            $("."+target+"_count").show();
         }
 
         if(make == 0){
             $("#amd_"+target).hide();
             $("#alt_"+target).hide();
             if (target == "gpu") {
-                $("#"+target+"_count").hide();
+                $("."+target+"_count").hide();
             }
         }else if(make == 1){
             $("#amd_"+target).show();

@@ -263,6 +263,17 @@ fieldset:last-child a{
    color: #FA2828;
 }
 
+#success {
+  font-size: 1.5em;
+  color: #FFF;
+  background: #1BF21B;
+  padding: 5px 10px;
+  max-width: 100px;
+  margin 10px auto;
+  text-align: center;
+  display: block;
+}
+
 #img-auth {
    float: right;
    margin-top: -40px;
