@@ -82,7 +82,7 @@ nav a:hover, a:active{
 
 nav ul {
     /*VIS*/
-    background-color: #FA2828; 
+    background-color: #DEDCCF; 
     opacity: 0.90;
    filter:Alpha(opacity=90); /*IE8- */
     /*nav bar shadow*/
@@ -98,7 +98,7 @@ nav ul {
     font-style:normal;
 }
 
-nav img {
+nav img {  
    opacity: 0.70;
    filter:Alpha(opacity=70); /*IE8- */
    padding: 0;
@@ -128,7 +128,7 @@ nav ul li:hover {
     -o-transition: all 0.10s ease-in-out;
     opacity: 1;
     color: #000;
-    background-color: #FFF;
+    background-color: #7A7A7A;
 }
 
 nav ul li:active {
@@ -212,10 +212,6 @@ textarea {
     outline: 0 none;
     padding: 5px 0px 5px 5px;
     width: 90%;
-}
-
-#gpu_count{
-    width: 10%;
 }
 
 input[type=checkbox] {

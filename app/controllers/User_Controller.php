@@ -38,7 +38,7 @@ class User_Controller extends Controller {
 
 	public function sign_out() {
 
-		//session_destroy();
+		session_destroy();
 
 		View::redirect("index");
 	}

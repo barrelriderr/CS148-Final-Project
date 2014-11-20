@@ -17,12 +17,15 @@ class Computer_Model extends Model {
 		return false;
 	}
 
-	public function insert_computer($name, $description, $color, $purpose) {
-		$builder_id = Controller::get_user_id();
-		$query = 'INSERT INTO computers (name, builder_id, description, color, purpose) VALUES (?, ?, ?, ?, ?)';
+	public function insert_computer($builder_id, $name, $description, $color, $purpose) {
 
-		$success = $this->binary_query($query, array($name, $builder_id,$description, $color, $purpose));
+		$query = 'INSERT INTO computers (builder_id, name, description, color, purpose) VALUES (?, ?, ?, ?, ?)';
 
-		return $success;
+		$success = $this->binary_query($query, array($builder_id, $name, $description, $color, $purpose));
+
+		// Get id of last insert
+		$build_id = $this->last_insert();
+
+		return $build_id[0][0];
 	}
 }

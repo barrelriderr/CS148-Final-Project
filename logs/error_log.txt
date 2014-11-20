@@ -44,3 +44,18 @@ Blank error message -@Monday 3rd of November 2014 01:43:14 AM
 Blank error message -@Monday 3rd of November 2014 01:43:14 AM
 Blank error message -@Monday 3rd of November 2014 01:43:20 AM
 1414975400 -@Monday 3rd of November 2014 01:43:20 AM
+Failed to connect. () -@Wednesday 19th of November 2014 04:21:38 PM
+Failed to connect. () -@Wednesday 19th of November 2014 04:21:57 PM
+Failed to connect. () -@Wednesday 19th of November 2014 04:21:58 PM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'order clause' -@Thursday 20th of November 2014 01:52:20 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'order clause' -@Thursday 20th of November 2014 01:52:20 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'order clause' -@Thursday 20th of November 2014 01:53:16 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'order clause' -@Thursday 20th of November 2014 01:53:16 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'order clause' -@Thursday 20th of November 2014 01:53:18 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'order clause' -@Thursday 20th of November 2014 01:53:18 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'field list' -@Thursday 20th of November 2014 02:12:40 AM
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'gpu_id' in 'field list' -@Thursday 20th of November 2014 02:12:40 AM
+SQLSTATE[22003]: Numeric value out of range: 1690 BIGINT UNSIGNED value is out of range in '(0 - `buildr`.`gpus`.`gpu_id`)' -@Thursday 20th of November 2014 02:18:38 AM
+SQLSTATE[22003]: Numeric value out of range: 1690 BIGINT UNSIGNED value is out of range in '(0 - `buildr`.`gpus`.`gpu_id`)' -@Thursday 20th of November 2014 02:18:38 AM
+SQLSTATE[22003]: Numeric value out of range: 1690 BIGINT UNSIGNED value is out of range in '(`buildr`.`gpus`.`gpu_id` * -(1))' -@Thursday 20th of November 2014 02:21:35 AM
+SQLSTATE[22003]: Numeric value out of range: 1690 BIGINT UNSIGNED value is out of range in '(`buildr`.`gpus`.`gpu_id` * -(1))' -@Thursday 20th of November 2014 02:21:35 AM

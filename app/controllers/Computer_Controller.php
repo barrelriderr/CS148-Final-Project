@@ -72,14 +72,19 @@ class Computer_Controller extends Controller{
 			static::$input['name'] = $name;
 			static::$input['description'] = $description;
 
-			// Purposes and color are assigned in their respective validation loops.
-
-
 			if (count(static::$error_messages) == 0) {				
 
-				echo "computer registered!";
-
-
+				$build_id = $this->model->insert_computer(Controller::get_user_id(),
+															static::$input['name'],
+															static::$input['description'],
+															$color,
+															$purposes_value
+															);
+				if ($build_id) {
+					ob_end_clean(); // Destroy buffer
+					header("Location: add_hardware.php?bid=$build_id");
+					exit();
+				}
 			}
 		}
 		View::make('add/add_build');

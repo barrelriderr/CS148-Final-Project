@@ -5,9 +5,15 @@ abstract class View {
 	public static $scripts;
 	public static $include_foot = true;
 
-	public static function redirect($location) {
+	public static function redirect($location, $get_vars = null) {
+		$link = null;
+
+		if ($get_vars != null) {
+			$link = "?".$get_vars;
+		}
+
 		ob_end_clean(); // Destroy buffer
-		header("Location: $location.php");
+		header("Location: $location.php$link");
 		exit();
 	}
 
@@ -45,10 +51,10 @@ abstract class View {
 	}
 
 	public function add_stylesheet($path) {
-		$stylesheets .= '<link media="screen" href="../public/css/'.$path.'" rel="stylesheet"></link><br>';
+		static::$stylesheets .= '<link media="screen" href="css/'.$path.'" rel="stylesheet"></link><br>';
 	}
 
 	public function add_script($path) {
-		$srcipts .= '<script src="../public/js/'.$path.'" type="text/javascript"></script><br>';
+		static::$scripts .= '<script src="js/'.$path.'" type="text/javascript"></script>'."\n";
 	}
 }

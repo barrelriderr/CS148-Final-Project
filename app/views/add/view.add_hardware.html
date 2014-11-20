@@ -1,10 +1,11 @@
 <?php
-View::$title = "Add Hardware -Hardware_Controller::$build_name";
+View::$title = "Add Hardware -".Hardware_Controller::$build_name;
 View::head();
 ?>
-<body>
 <h1>ADD HARDWARE</h1>
-<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?bid=".Hardware_Controller::$build_id ?>" method="POST">
+
+
     <p>Please enter the hardware information for the computer that you just registered.</p>
     <?php 
         // ERRORS
@@ -14,64 +15,94 @@ View::head();
         $input = Hardware_Controller::$input;
     ?>
     <fieldset>
-        <select name="CPU Make">
-            <option>CPU Make...</option>
-            <option <?php echo $input['make.AMD'];?>>AMD</option>
-            <option <?php echo $input['make.Intel'];?>>Intel</option>
-        </select><br>
-        <div id="amd_cpu_models">
-            <select name="amd_model">
-                <?php Hardware_Controller::get_amd_cpus() ?>
-            </select>
-        </div>
-        <div id="intel_cpu_models">
-            <select name="intel_model">
-                <?php Hardware_Controller::get_intel_cpus() ?>
-            </select>
-        </div>
-        <br>
-    </fieldset>
-    <fieldset>
-        <select name="GPU Make">
-            <option>GPU Make...</option>
-            <option <?php echo $input['make.AMD'];?>>AMD</option>
-            <option <?php echo $input['make.Nvidea'];?>>NVidia</option>
-            <option <?php echo $input['make.None'];?>>None</option>
-        </select><br>
-        <div id="amd_gpu_models">
-            <select name="amd_model">
-                <?php Hardware_Controller::get_amd_gpus() ?>
-            </select>
-        </div>
-        <div id="nvidia_gpu_models">
-            <select name="nvidia_model">
-                <?php Hardware_Controller::get_nvidia_gpus() ?>
-            </select>
-        </div>
-        <br>
-        <a id="add-button" href="">+</a></div>
-    </fieldset>
-    <fieldset>
-        <select>
-            <option>RAM Speed</option>
-            <option <?php echo $input['ram_speed.AMD'];?>>1600</option>
-            <option <?php echo $input['ram_speed.AMD'];?>>1800</option>
-            <option <?php echo $input['ram_speed.AMD'];?>>2400</option>
+    <legend>CPU</legend>
+        <select name="cpu_make" id="cpu">
+            <option value="0">CPU Make</option>
+            <option value="1" <?php echo $input['cpu_make.1'];?>>AMD</option>
+            <option value="2" <?php echo $input['cpu_make.2'];?>>Intel</option>
         </select>
-        <select>
-            <option>RAM Size</option>
-            <option <?php echo $input['ram_size.1x4'];?>>1x4GB</option>
-            <option <?php echo $input['ram_size.2x4'];?>>2x4GB</option>
-            <option <?php echo $input['ram_size.4x4'];?>>4x4GB</option>
-            <option <?php echo $input['ram_size.1x8'];?>>1x8GB</option>
-            <option <?php echo $input['ram_size.2x8'];?>>2x8GB</option>
-            <option <?php echo $input['ram_size.4x8'];?>>4x8GB</option>
-            <option <?php echo $input['ram_size.1x16'];?>>1x16GB</option>
-            <option <?php echo $input['ram_size.2x16'];?>>2x16GB</option>
+        <select name="1_cpu" id="amd_cpu">
+            <?php Hardware_Controller::make_cpu_list("AMD") ?>
+        </select>
+        <select name="2_cpu" id="alt_cpu">
+            <?php Hardware_Controller::make_cpu_list("Intel") ?>
+        </select>
+        <br>
+    </fieldset>
+    <fieldset>
+        <legend>GPU</legend>
+        <select name="gpu_make" id="gpu">
+            <option value="0">No GPU</option>
+            <option value="1" <?php echo $input['gpu_make.1'];?>>AMD</option>
+            <option value="2" <?php echo $input['gpu_make.2'];?>>Nvidia</option>
+        </select>
+        <select name="1_gpu" id="amd_gpu">
+            <?php Hardware_Controller::make_gpu_list("AMD") ?>
+        </select>
+        <select name="2_gpu" id="alt_gpu">
+            <?php Hardware_Controller::make_gpu_list("Nvidia") ?>
+        </select>
+        <select name="gpu_count" id="gpu_count">
+            <option <?php echo $input['gpu_count1'];?>>1</option>
+            <option <?php echo $input['gpu_count2'];?>>2</option>
+            <option <?php echo $input['gpu_count3'];?>>3</option>
+            <option <?php echo $input['gpu_count4'];?>>4</option>
+        </select><br>
+    </fieldset>
+    <fieldset>
+    <legend>RAM</legend>
+        <select name="ram_speed">
+            <option value="0">RAM Speed</option>
+            <?php Hardware_Controller::make_ram_speed_list() ?>
+        </select>
+        <select name="ram_size">
+            <option value="0">RAM Size</option>
+            <?php Hardware_Controller::make_ram_size_list() ?>
         </select>
     </fieldset>
     <fieldset>
         <input type="submit" value="FINISH" id="enter-button"/>
     </fieldset>
+
+
+<script type="text/javascript">
+    
+    function display_hardware(target) {
+        var make;
+        make = parseInt($("#"+target).val());
+        
+        if(target == "gpu"){
+            $("#"+target+"_count").show();
+        }
+
+        if(make == 0){
+            $("#amd_"+target).hide();
+            $("#alt_"+target).hide();
+            if (target == "gpu") {
+                $("#"+target+"_count").hide();
+            }
+        }else if(make == 1){
+            $("#amd_"+target).show();
+            $("#alt_"+target).hide();
+        }else {
+            $("#amd_"+target).hide();
+            $("#alt_"+target).show();
+        }
+    }
+
+    $(document).ready(function() {
+        display_hardware("cpu");
+        display_hardware("gpu");
+    });
+
+    $( "#cpu" ).change(function() {
+        display_hardware("cpu");
+    });
+
+    $( "#gpu" ).change(function() {
+        display_hardware("gpu");
+    });
+       
+</script>
 </form>
 </body>

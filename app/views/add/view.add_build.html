@@ -13,10 +13,12 @@ View::head();
         $input = Computer_Controller::$input;
     ?>
     <fieldset>
+    <legend>Computer</legend>
         <input type="text" placeholder="Build Name" name="name" value="<?php echo $input['name'] ?>"/><br>
         <textarea name="description" placeholder="Tell us the story of your computer..." rows="4" cols="45"><?php echo $input['description'] ?></textarea>
     </fieldset>
     <fieldset>
+    <legend>Details</legend>
         <select name="color">
             <option>Build Color...</option>
             <option <?php echo $input['color.Black'];?>>Black</option>

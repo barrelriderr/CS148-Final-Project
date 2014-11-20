@@ -9,6 +9,9 @@ require "../src/modelling/Model.php";
 // Enable views
 require "../src/viewing/View.php";
 
+ob_start();
+session_start();
+
 function get_controller($controller, $function, $parameters = null) {
 	$controller .= "_Controller";
 
