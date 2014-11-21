@@ -4,7 +4,7 @@
 class Controller {
 
 	private static $signed_in = false;
-	protected $database;
+	protected $model;
 	public static $error_messages;
 
 	public static function is_signed_in() {

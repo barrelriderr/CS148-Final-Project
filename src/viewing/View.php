@@ -50,7 +50,7 @@ abstract class View {
 		require_once("../app/views/master/view.master.foot.html");
 	}
 
-	public function add_stylesheet($path) {
+	public function add_style($path) {
 		static::$stylesheets .= '<link media="screen" href="css/'.$path.'" rel="stylesheet"></link><br>';
 	}
 

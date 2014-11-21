@@ -42,7 +42,7 @@ html {
 
    min-height:  400px;
 
-   margin:  0 auto 0 auto;
+   margin:  0 auto 30px auto;
 
    background:  #fff;
    border:  1px solid #000;
@@ -247,7 +247,7 @@ article {
   padding: 0 20px;
 }
 
-legend {
+legend, h3 {
   color:  #333;
   font: Courier;
   font-size:  1.5em;

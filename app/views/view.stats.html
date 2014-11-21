@@ -1,39 +1,106 @@
 <?php 
 View::$title = "Stats";
 View::add_script("chart/Chart.js");
+View::add_style("stats_style.css");
 View::head();
 ?>
 <body>
 <h1>STATS</h1>
-<canvas id="myChart" width="400" height="400"></canvas>
-
+<h3>CPU Core Distribution</h3>
+<p>This is paragraph is used to store additional information on each graph.</p>
+<canvas id="cpu_core_distribution" class="radar_chart" width="300" height="300"></canvas>
 <script>
-var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-var barChartData = {
-labels : ["January","February","March","April","May","June","July"],
-datasets : [
-{
-fillColor : "rgba(220,220,220,0.5)",
-strokeColor : "rgba(220,220,220,0.8)",
-highlightFill: "rgba(220,220,220,0.75)",
-highlightStroke: "rgba(220,220,220,1)",
-data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-},
-{
-fillColor : "rgba(151,187,205,0.5)",
-strokeColor : "rgba(151,187,205,0.8)",
-highlightFill : "rgba(151,187,205,0.75)",
-highlightStroke : "rgba(151,187,205,1)",
-data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-}
-]
-}
+<?php
+$cpu_cores_data = Stats_Controller::$cpu_core_distribution;
+
+$labels = $cpu_cores_data['labels'];
+
+$amd_data = $cpu_cores_data['amd_data'];
+$intel_data = $cpu_cores_data['intel_data'];
+
+?>
+
+var core_data = {
+    labels: [<?php echo $labels ?>],
+    datasets: [
+        {
+            label: "AMD CPUs",
+            fillColor: "rgba(240,40,60,0.2)",
+            strokeColor: "rgba(240,40,60,1)",
+            pointColor: "rgba(240,40,60,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#000",
+            pointHighlightStroke: "rgba(240,40,60,1)",
+            data: [<?php echo $amd_data ?>]
+        },
+        {
+            label: "Intel CPUs",
+            fillColor: "rgba(40,158,237,0.2)",
+            strokeColor: "rgba(40,158,237,1)",
+            pointColor: "rgba(40,158,237,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(40,158,237,1)",
+            data: [<?php echo $intel_data ?>]
+        }
+    ]
+};
+</script>
+
+
+<h3>GPU SLI/Crossfire Distribution</h3>
+<p>This is paragraph is used to store additional information on each graph.</p>
+<canvas id="gpu_count_distribution" width="300" height="300"></canvas>
+<?php
+    $gpu_count = Stats_Controller::$gpu_count;
+?>
+<script>
+
+var gpu_count_data = [
+    {
+        value: <?php echo $gpu_count[0] ?>,
+        color:"#4D5360",
+        highlight: "#616774",
+        label: "0 Cards"
+    },
+    {
+        value: <?php echo $gpu_count[1] ?>,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "1 Card"
+    },
+    {
+        value: <?php echo $gpu_count[2] ?>,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "2 Cards"
+    },
+    {
+        value: <?php echo $gpu_count[3] ?>,
+        color: "#949FB1",
+        highlight: "#A8B3C5",
+        label: "3 Cards"
+    },
+    {
+        value: <?php echo $gpu_count[4] ?>,
+        color: "#F7464A",
+        highlight: "#FF5A5E",
+        label: "4 Cards"
+    }
+
+];
+
+
 window.onload = function(){
-var ctx = document.getElementById("myChart").getContext("2d");
-window.myBar = new Chart(ctx).Bar(barChartData, {
-responsive : true
-});
+
+    var cpu_core_canvas = document.getElementById("cpu_core_distribution").getContext("2d");
+    var cpu_core_distribution_RadarChart = new Chart(cpu_core_canvas).Radar(core_data);
+
+    var gpu_count_canvas = document.getElementById("gpu_count_distribution").getContext("2d");
+    var gpu_count_chart = new Chart(gpu_count_canvas).Pie(gpu_count_data);
+
 }
 </script>
+
 
 </body>
