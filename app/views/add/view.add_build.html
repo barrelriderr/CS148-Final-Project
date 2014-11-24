@@ -2,7 +2,6 @@
 View::$title = "Add Computer";
 View::head();
 ?>
-<body>
 <h1>ADD COMPUTER</h1>
 <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
     <?php 
@@ -37,7 +36,6 @@ View::head();
         <input type="checkbox" name="purposes[]" value="work" <?php echo $input['purposes.work'];?>>Work<br>
     </fieldset>
     <fieldset>
-        <input type="submit" value="ADD" id="enter-button"/>
+        <input type="submit" value="ADD" class="good button"/>
     </fieldset>
 </form>
-</body>

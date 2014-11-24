@@ -70,8 +70,6 @@ class Stats_Controller extends Controller{
 			}
 		}
 
-		$core_range[0] = $core_range[0]." cores";
-
 		$labels = '"' . implode('", "', $core_range) . '"';
 
 		$amd_cores_string = implode(', ', $amd_cores);

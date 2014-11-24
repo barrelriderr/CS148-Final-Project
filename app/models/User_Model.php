@@ -10,7 +10,7 @@ class User_Model extends Model {
 
 		$hashed_password = hash('sha256', $password);
 		
-		$query = "SELECT user_id FROM users WHERE email LIKE ? AND password LIKE ?";
+		$query = "SELECT user_id FROM users WHERE email LIKE ? AND password LIKE ? AND confirmed=1";
 
 		$results = $this->return_query($query, array($email, $hashed_password));
 
@@ -34,6 +34,17 @@ class User_Model extends Model {
 		$results = $this->return_query($query, array($user_id));
 
 		return $results;
+	}
+
+	public function get_email($user_id) {
+		$query = "	SELECT
+						email
+					FROM
+						users
+					WHERE
+						user_id=?";
+
+		return $this->return_query($query, array($user_id));
 	}
 
 	public function get_users_unfinished_computers($user_id) {

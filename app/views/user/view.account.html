@@ -1,20 +1,39 @@
 <?php 
 View::$title = "Account";
+View::add_style("account_style.css");
 View::head();
 ?>
-<body>
 <h1>Account</h1>
 <article>
-<?php echo ($_GET['success'] == 1) ? '<div id="success">Success!</div>' : ""?>
-<ol>
-	<li><a href="signout.php">Sign out</a></li>
-</ol>
-<h3>Your Computers <a href="add_computer.php">+</a></h3>
-<?php User_Controller::make_computer_list(User_Controller::$computer_list); ?>
-
-<?php echo (User_Controller::$unfinished_computer_list != null) ? "<h3>Unfinished Computers</h3>" : "";
-	User_Controller::make_computer_list(User_Controller::$unfinished_computer_list);
- ?>
-
+<div id="top-section">
+	<h4>User: <?php echo User_Controller::$email ?></h4>
+	<?php echo ($_GET['success'] == 1) ? '<div id="success">Success!</div>' : ""?>
+	<a href="signout.php" id="signout" class="danger button">Sign out</a>
+</div>
+<div id="left-section">
+	<h3>Your Computers</h3>
+	<p style="display: block;">
+		Update your computer information or add a new one.
+	</p>
+	<div style="width: 50%; float: left; margin-top:5px">
+		<div style="height: 120px; overflow: scroll;">
+		<?php User_Controller::make_computer_list(User_Controller::$computer_list); ?>
+		</div>
+		<div style="height: 120px; overflow: scroll;">
+		<?php echo (User_Controller::$unfinished_computer_list != null) ? "<h3>Unfinished Computers</h3>" : "";
+			User_Controller::make_computer_list(User_Controller::$unfinished_computer_list);
+		 ?>
+		 </div>
+	</div>
+	<div style="width: 50%; height=100%; float: right; text-align: center; margin-top: 40px;">
+		<a href="addComputer.php" class="good button">Add</a>
+	</div>
+</div>
+<div id="right-section">
+	<?php  
+		if(Controller::is_admin()) {
+			include("admin_section.html");
+		}
+	?>
+</div>
 </article>
-</body>

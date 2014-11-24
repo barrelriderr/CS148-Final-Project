@@ -16,31 +16,31 @@ View::head();
     ?>
     <fieldset>
     <legend>CPU</legend>
-        <select name="cpu_make" id="cpu">
+        <select name="cpu_make" id="cpu" class="small">
             <option value="0">CPU Make</option>
-            <option value="1" <?php echo $input['cpu_make.1'];?>>AMD</option>
-            <option value="2" <?php echo $input['cpu_make.2'];?>>Intel</option>
+            <option value="1" <?php echo $input['cpu_make.1'];?>>Intel</option>
+            <option value="2" <?php echo $input['cpu_make.2'];?>>AMD</option>
         </select>
-        <select name="1_cpu" id="amd_cpu">
-            <?php Hardware_Controller::make_cpu_list("AMD") ?>
-        </select>
-        <select name="2_cpu" id="alt_cpu">
+        <select name="1_cpu" id="alt_cpu">
             <?php Hardware_Controller::make_cpu_list("Intel") ?>
+        </select>
+        <select name="2_cpu" id="amd_cpu">
+            <?php Hardware_Controller::make_cpu_list("AMD") ?>
         </select>
         <br>
     </fieldset>
     <fieldset>
         <legend>GPU</legend>
-        <select name="gpu_make" id="gpu">
+        <select name="gpu_make" id="gpu" class="small">
             <option value="0">No GPU</option>
-            <option value="1" <?php echo $input['gpu_make.1'];?>>AMD</option>
-            <option value="2" <?php echo $input['gpu_make.2'];?>>Nvidia</option>
+            <option value="1" <?php echo $input['gpu_make.1'];?>>Nvidia</option>
+            <option value="2" <?php echo $input['gpu_make.2'];?>>AMD</option>
         </select>
-        <select name="1_gpu" id="amd_gpu">
-            <?php Hardware_Controller::make_gpu_list("AMD") ?>
-        </select>
-        <select name="2_gpu" id="alt_gpu">
+        <select name="1_gpu" id="alt_gpu">
             <?php Hardware_Controller::make_gpu_list("Nvidia") ?>
+        </select>
+        <select name="2_gpu" id="amd_gpu">
+            <?php Hardware_Controller::make_gpu_list("AMD") ?>
         </select>
         <span class="gpu_count"><input type="radio" name="gpu_count" class="gpu_count" value="1" <?php echo $input['gpu_count.1']?>>1</span>
         <span class="gpu_count"><input type="radio" name="gpu_count" class="gpu_count" value="2" <?php echo $input['gpu_count.2']?>>2</span>
@@ -49,7 +49,7 @@ View::head();
     </fieldset>
     <fieldset>
     <legend>RAM</legend>
-        <select name="ram_speed">
+        <select name="ram_speed" class="small">
             <option value="0">RAM Speed</option>
             <?php Hardware_Controller::make_ram_speed_list() ?>
         </select>
@@ -59,7 +59,12 @@ View::head();
         </select>
     </fieldset>
     <fieldset>
-        <input type="submit" value="FINISH" id="enter-button"/>
+        <?php 
+        $id = Hardware_Controller::$build_id;
+        $delete_html = "<a href='deleteComputer.php?id=$id' class='danger button'>DELETE</a>";
+        echo (Hardware_Controller::$finished_build) ? $delete_html : ""
+        ?>
+        <input type="submit" value="FINISH" class="good button"/>
     </fieldset>
 
 
@@ -80,11 +85,11 @@ View::head();
                 $("."+target+"_count").hide();
             }
         }else if(make == 1){
-            $("#amd_"+target).show();
-            $("#alt_"+target).hide();
-        }else {
             $("#amd_"+target).hide();
             $("#alt_"+target).show();
+        }else {
+            $("#amd_"+target).show();
+            $("#alt_"+target).hide();
         }
     }
 
@@ -103,4 +108,3 @@ View::head();
        
 </script>
 </form>
-</body>

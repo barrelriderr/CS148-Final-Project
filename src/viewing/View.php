@@ -34,7 +34,7 @@ abstract class View {
 
 
 				if (!file_exists($view_path))
-					Controller::redirect("404");
+					View::redirect("404");
 				else
 					require_once($view_path);
 				if (static::$include_foot)
@@ -51,7 +51,7 @@ abstract class View {
 	}
 
 	public function add_style($path) {
-		static::$stylesheets .= '<link media="screen" href="css/'.$path.'" rel="stylesheet"></link><br>';
+		static::$stylesheets .= '<link media="screen" href="css/'.$path.'" rel="stylesheet"></link>'."\n";
 	}
 
 	public function add_script($path) {

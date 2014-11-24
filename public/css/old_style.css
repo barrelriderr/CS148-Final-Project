@@ -82,7 +82,7 @@ nav a:hover, a:active{
 
 nav ul {
     /*VIS*/
-    background-color: #DEDCCF; 
+    background-color: #FA2828; 
     opacity: 0.90;
    filter:Alpha(opacity=90); /*IE8- */
     /*nav bar shadow*/

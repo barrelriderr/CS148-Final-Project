@@ -23,17 +23,45 @@ class Hardware_Model extends Model {
 		return $this->binary_query($query, $computer_specs);
 	}
 
+	public function get_hardware($computer_id) {
+
+		$query = "	SELECT
+						computers.cpu_id,
+						computers.gpu_id,
+						gpu_count,
+						ram_size,
+						ram_speed,
+						cpus.maker_id AS cpu_maker,
+						gpus.make AS gpu_maker
+					FROM
+						computers,
+						cpus,
+						gpus
+					WHERE
+						cpus.cpu_id = computers.cpu_id
+						AND gpus.gpu_id = computers.gpu_id
+						AND computer_id=?
+						AND builder_id=?";
+
+		$user_id = Controller::get_user_id();
+
+		return $this->return_query($query, array($computer_id, $user_id));
+	}
+
 	public function get_build($computer_id) {
+
 		$query = "SELECT 
 						name,
 						cpu_id
 					FROM 
 						computers 
 					WHERE 
-						computer_id=?";
-		$results = $this->return_query($query, array($computer_id));
+						computer_id=?
+						AND builder_id=?";
 
-		return $results;
+		$user_id = Controller::get_user_id();
+
+		return $this->return_query($query, array($computer_id, $user_id));
 	}
 
 	public function get_cpu_list($make) {

@@ -1,0 +1,10 @@
+<?php 
+View::$title = "User ".intval($_GET['uid']);
+View::head();
+?>
+<h1>User <?php echo intval($_GET['uid']) ?></h1>
+<ul>
+<?php echo Admin_Controller::$user_html ?>
+</ul>
+<a href="deleteUser.php?uid=<?php echo intval($_GET['uid']) ?>" class="danger button">Delete User</a>
+<a href="editUsers.php?uid=<?php echo intval($_GET['uid']) ?>&alias=1" class="good button">Alias</a>

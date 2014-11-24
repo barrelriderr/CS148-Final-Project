@@ -11,7 +11,7 @@ class Register_Controller extends Controller{
 		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
 			require("../app/models/Register_Model.php");
-			$this->database = new Register_Model();
+			$this->model = new Register_Model();
 
 			// Sanitize
 			$email = trim(htmlentities($_POST['email']));
@@ -27,7 +27,7 @@ class Register_Controller extends Controller{
 
 			}else {
 
-				$unique_email = $this->database->is_unique_email($email);
+				$unique_email = $this->model->is_unique_email($email);
 				if (!$unique_email) {
 					static::$error_messages['email'] = "Email already in use.";
 				}
@@ -58,7 +58,7 @@ class Register_Controller extends Controller{
 
 				$password = hash('sha256', $password);
 
-				if($this->database->insert_user($email, $password)) {
+				if($this->model->insert_user($email, $password)) {
 					View::make('registration/registration_success');
 					return;
 				}else {
@@ -77,10 +77,10 @@ class Register_Controller extends Controller{
 		$key =  trim(htmlentities($_GET['']));
 
 		if ($user_id != null && $key != null) {
-			$this->database = new Register_Model();
+			$this->model = new Register_Model();
 			
-			if ($this->database->check_user($user_id, $key)) {
-				$this->database->confirm_user($user_id, $key);
+			if ($this->model->check_user($user_id, $key)) {
+				$this->model->confirm_user($user_id, $key);
 				return;
 			}
 		}

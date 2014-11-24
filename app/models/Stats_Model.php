@@ -88,6 +88,29 @@ class Stats_Model extends Model {
 		return $this->return_query($query);
 	}
 
+	public function get_top_5_cpus() {
+		$query = "	SELECT 
+						COUNT(computer_id) AS count,
+						comp.cpu_id, 
+						CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu
+					FROM 
+						computers AS comp, 
+						cpus,
+						cpu_makers
+					WHERE 
+                    	comp.cpu_id = cpus.cpu_id
+                        AND cpus.maker_id = cpu_makers.maker_id
+						AND comp.cpu_id IS NOT NULL 
+					GROUP BY 
+						comp.cpu_id 
+					ORDER BY 
+						count DESC 
+					LIMIT 
+						5";
+
+		return $this->return_query($query);
+	}
+
 	public function get_computer_standing($build_id) {
 		$query = "";
 

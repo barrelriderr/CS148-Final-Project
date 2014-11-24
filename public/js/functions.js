@@ -12,17 +12,17 @@ function waiting_cursor(text, count) {
 		}, 1500);
 }
 
-$(function () {
-	$("nav img")
-		.mouseover( function() {
-			var src = $(this).attr("src").match(/[^\.]+/)+"_color.png";
-			$(this).attr("src", src);
-		})
-		.mouseout( function() {
-			var src = $(this).attr("src").replace("_color.png", ".png");
-			$(this).attr("src", src);
-		});
-});
+// $(function () {
+// 	$("nav img")
+// 		.mouseover( function() {
+// 			// var src = $(this).attr("src").match(/[^\.]+/)+"_color.png";
+// 			// $(this).attr("src", src);
+// 		})
+// 		.mouseout( function() {
+// 			var src = $(this).attr("src").replace("_color.png", ".png");
+// 			$(this).attr("src", src);
+// 		});
+// });
 
 $(document).ready(function() {
 	waiting_cursor(document.getElementsByTagName("H1")[0].innerHTML, 0);

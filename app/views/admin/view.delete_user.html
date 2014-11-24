@@ -1,0 +1,9 @@
+<?php 
+View::$title = "Delete";
+View::head();
+?>
+<h1>DELETE USER</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']).'?uid='.intval($_GET['uid']) ?>" method="POST">
+	<a href="account.php">Cancel</a>
+	<input type="submit" value="DELETE" class="danger button"/>
+</form>

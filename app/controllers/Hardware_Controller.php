@@ -6,7 +6,6 @@ class Hardware_Controller extends Controller{
 	public static $build_name = null;
 	public static $finished_build;
 	public static $build_id = null;
-	private $model;
 	private static $cpu_list = [];
 	private static $gpu_list = [];
 	private static $ram_list = [];
@@ -131,6 +130,22 @@ class Hardware_Controller extends Controller{
 						View::redirect("account", "success=1");
 					}
 				}
+			}else if (static::$finished_build == true) {
+				$old_hardware = $this->model->get_hardware(static::$build_id);
+
+				$cpu_make = $old_hardware[0]['cpu_maker'];
+				$gpu_make = $old_hardware[0]['gpu_maker'];
+				$gpu_count = $old_hardware[0]['gpu_count'];
+
+				static::$input["cpu_make.$cpu_make"] = "selected";
+				static::$input["cpu_model"] = $old_hardware[0]['cpu_id'];
+
+				static::$input["gpu_make.$gpu_make"] = "selected";
+				static::$input["gpu_model"] = $old_hardware[0]['gpu_id'];
+				static::$input["gpu_count.$gpu_count"] = "checked";
+
+				static::$input['ram_speed'] = $old_hardware[0]['ram_speed'];
+				static::$input['ram_size'] = $old_hardware[0]['ram_size'];
 			}
 
 			View::make('add/add_hardware');

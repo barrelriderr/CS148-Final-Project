@@ -82,11 +82,29 @@ class Computer_Controller extends Controller{
 															);
 				if ($build_id) {
 					ob_end_clean(); // Destroy buffer
-					header("Location: add_hardware.php?bid=$build_id");
+					header("Location: addHardware.php?bid=$build_id");
 					exit();
 				}
 			}
 		}
 		View::make('add/add_build');
+	}
+
+	public function delete(){
+		$computer_id = intval($_GET['id']);
+
+		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+			if($computer_id) {
+				require("../app/models/Computer_Model.php");
+				$this->model = new Computer_Model();
+
+				$this->model->delete_computer($computer_id);
+
+				View::redirect('account');
+			}
+
+		}else {
+			View::make('add/delete_computer');
+		}
 	}
 }

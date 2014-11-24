@@ -17,6 +17,18 @@ class Computer_Model extends Model {
 		return false;
 	}
 
+	public function delete_computer($computer_id){
+		$query = "	DELETE FROM 
+						computers 
+					WHERE 
+						computer_id=?
+						AND builder_id=?";
+
+		$user_id = Controller::get_user_id();
+
+		return $this->binary_query($query, array($computer_id, $user_id));
+	}
+
 	public function insert_computer($builder_id, $name, $description, $color, $purpose) {
 
 		$query = 'INSERT INTO computers (builder_id, name, description, color, purpose) VALUES (?, ?, ?, ?, ?)';

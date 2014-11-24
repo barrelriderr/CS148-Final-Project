@@ -1,0 +1,39 @@
+<?php 
+View::$title = "Edit Computers";
+View::head();
+?>
+<h1>EDIT HARDWARE</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+    <?php 
+        // ERRORS
+        Controller::display_errors();
+
+        // Input
+        $input = Admin_Controller::$input;
+    ?>
+    <fieldset>
+        <select>
+            <option>Type</option>
+            <option value="1">GPU</option>
+            <option value="2">CPU</option>
+        </select>
+        <select>
+            <option>Intel</option>
+            <option>AMD</option>
+        </select>
+        <select>
+            <option>Nvidia</option>
+            <option>AMD</option>
+        </select>
+        <input type="text" placeholder="Model" name="model" value="<?php echo $input['email'] ?>"/>
+        <!-- CPU Only Input -->
+        <input type="text" placeholer="Cores" name="core_count" value="<?php echo $input['cores'] ?>"/>
+        <input type="text" placeholer="Clock" name="speed" value="<?php echo $input['speed'] ?>"/>
+        <!-- GPU Only Input -->
+        <input type="radio" name="super_gpu" class="super_gpu" value="1" <?php echo $input['super_gpu.1']?>>Yes
+        <input type="radio" name="super_gpu" class="super_gpu" value="0" <?php echo $input['super_gpu.0']?>>No
+	</fieldset>
+    <fieldset>
+        <input type="submit" value="ENTER" class="good button"/>
+    </fieldset>
+</form>

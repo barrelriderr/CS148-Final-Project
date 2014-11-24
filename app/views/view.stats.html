@@ -4,10 +4,16 @@ View::add_script("chart/Chart.js");
 View::add_style("stats_style.css");
 View::head();
 ?>
-<body>
 <h1>STATS</h1>
+<h3 style="text-align: center; color: #FA2828;">How Do You Stack Up?</h3>
+<p style="margin-right: 90px;">
+    Add your own computer's hardware, style and name to our database. Simply <a href="register.php">create an account</a>
+    and start comparing and sharing your creations with other people's!
+</p>
 <h3>CPU Core Distribution</h3>
-<p>This is paragraph is used to store additional information on each graph.</p>
+<p>This chart shows how many cores each computer has in it's CPU.</p>
+    <div id="amd">AMD</div>
+    <div id="intel">intel</div>
 <canvas id="cpu_core_distribution" class="radar_chart" width="300" height="300"></canvas>
 <script>
 <?php
@@ -21,7 +27,7 @@ $intel_data = $cpu_cores_data['intel_data'];
 ?>
 
 var core_data = {
-    labels: [<?php echo $labels ?>],
+    labels: ["1 core",<?php echo $labels ?>],
     datasets: [
         {
             label: "AMD CPUs",
@@ -31,7 +37,7 @@ var core_data = {
             pointStrokeColor: "#fff",
             pointHighlightFill: "#000",
             pointHighlightStroke: "rgba(240,40,60,1)",
-            data: [<?php echo $amd_data ?>]
+            data: [0, <?php echo $amd_data ?>]
         },
         {
             label: "Intel CPUs",
@@ -41,7 +47,7 @@ var core_data = {
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(40,158,237,1)",
-            data: [<?php echo $intel_data ?>]
+            data: [0, <?php echo $intel_data ?>]
         }
     ]
 };
@@ -49,7 +55,7 @@ var core_data = {
 
 
 <h3>GPU SLI/Crossfire Distribution</h3>
-<p>This is paragraph is used to store additional information on each graph.</p>
+<p>This chart shows how many GPU's people have in each system.</p>
 <canvas id="gpu_count_distribution" width="300" height="300"></canvas>
 <?php
     $gpu_count = Stats_Controller::$gpu_count;
@@ -101,6 +107,3 @@ window.onload = function(){
 
 }
 </script>
-
-
-</body>

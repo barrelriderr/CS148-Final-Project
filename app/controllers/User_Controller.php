@@ -5,6 +5,7 @@ class User_Controller extends Controller {
 	public static $input = array();
 	public static $computer_list = [];
 	public static $unfinished_computer_list = [];
+	public static $email;
 
 
 	public function sign_in() {
@@ -16,15 +17,23 @@ class User_Controller extends Controller {
 
 			static::$input['email'] = $email;
 
-			if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match_all('$\S*(?=\S{8,100})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$', $password)) {
-				static::$error_messages['signin'] = "Invalid credentials";
+			if (strtoupper($email) == "GUEST") {
+				// Guest account
+				$email = "guest";
+			}else {
+				if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match_all('$\S*(?=\S{8,100})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$', $password)) {
+					static::$error_messages['signin'] = "Invalid credentials";
+				}
 			}
 			
 			if (count(static::$error_messages) == 0) {
 				require("../app/models/User_Model.php");
 				$this->model = new User_Model();
-
-				$user_id = $this->model->signin($email, $password);
+				if ($email == "guest") {
+					$user_id = 1;
+				}else {
+					$user_id = $this->model->signin($email, $password);
+				}
 
 				if ($user_id) {
 					$_SESSION['user_id'] = intval($user_id);
@@ -41,9 +50,14 @@ class User_Controller extends Controller {
 
 	public function sign_out() {
 
-		session_destroy();
-
-		View::redirect("index");
+		if (Controller::get_alias()) {
+			//KILL ALIAS SUPER GLOBAL
+			unset($_SESSION['alias']);
+			View::redirect("account");
+		} else {
+			session_destroy();
+			View::redirect("index");
+		}
 	}
 
 	public function account() {
@@ -53,6 +67,10 @@ class User_Controller extends Controller {
 
 			require("../app/models/User_Model.php");
 			$this->model = new User_Model();
+
+			$email = $this->model->get_email($user_id);
+
+			static::$email = htmlentities($email[0]['email']);
 
 			static::$computer_list = $this->model->get_users_computers($user_id);
 
@@ -69,13 +87,12 @@ class User_Controller extends Controller {
 		$html = "<ol>\n";
 
 		foreach ($list as $value) {
-			$html .= '<li><a href="add_hardware.php?bid='.$value['computer_id'].'">'.$value['name']."</a></li>\n";
+			$html .= '<li><a href="addHardware.php?bid='.$value['computer_id'].'">'.$value['name']."</a></li>\n";
 		}
 
 		$html .= "</ol>\n";
 
 		echo $html;
 	}
-
 }
 

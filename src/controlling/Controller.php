@@ -22,14 +22,26 @@ class Controller {
 		return static::$signed_in;
 	}
 
+	public static function get_alias() {
+		if (isset($_SESSION['alias'])) {
+			return $_SESSION['alias'];
+		}
+		return false;
+	}
+
 	public static function get_user_id() {
+		$alias = Controller::get_alias();
+		if ($alias) {
+			return $alias;
+		}
 		return intval($_SESSION['user_id']);
 	}
 
-	public static function is_admin() {
-		if (static::$get_user_id == 7) {
+	public static function is_admin($user_id = null) {
+		if (static::get_user_id() == 7 || $user_id == 7) {
 			return true;
 		}
+		
 		return false;
 	}
 
