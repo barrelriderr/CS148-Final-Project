@@ -12,9 +12,12 @@ View::head();
 </p>
 <h3>CPU Core Distribution</h3>
 <p>This chart shows how many cores each computer has in it's CPU.</p>
-    <div id="amd">AMD</div>
-    <div id="intel">intel</div>
-<canvas id="cpu_core_distribution" class="radar_chart" width="300" height="300"></canvas>
+<div class="legend">
+    <div class="legend-title">Legend</div>
+    <div class="amd">AMD</div>
+    <div class="intel">Intel</div>
+</div>
+<canvas id="cpu_core_distribution" class="radar_chart" width="400" height="400"></canvas>
 <script>
 <?php
 $cpu_cores_data = Stats_Controller::$cpu_core_distribution;
@@ -53,6 +56,60 @@ var core_data = {
 };
 </script>
 
+<h3>CPU Clock Speed Distribution</h3>
+<p>This chart shows the clock speeds of all computers.</p>
+<div class="legend">
+    <div class="legend-title">Legend</div>
+    <div class="amd">AMD</div>
+    <div class="intel">Intel</div>
+</div>
+
+<canvas id="cpu_speed_distribution" class="radar_chart" width="400" height="400"></canvas>
+<script>
+<?php
+$cpu_speed_data = Stats_Controller::$cpu_speed_distribution;
+
+$labels = $cpu_speed_data['labels'];
+
+$amd_data = $cpu_speed_data['amd_data'];
+$intel_data = $cpu_speed_data['intel_data'];
+
+?>
+
+var speed_data = {
+    labels: [<?php echo $labels ?>],
+    datasets: [
+        {
+            label: "AMD CPUs",
+            fillColor: "rgba(240,40,60,0.2)",
+            strokeColor: "rgba(240,40,60,1)",
+            pointColor: "rgba(240,40,60,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#000",
+            pointHighlightStroke: "rgba(240,40,60,1)",
+            data: [<?php echo $amd_data ?>]
+        },
+        {
+            label: "Intel CPUs",
+            fillColor: "rgba(40,158,237,0.2)",
+            strokeColor: "rgba(40,158,237,1)",
+            pointColor: "rgba(40,158,237,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(40,158,237,1)",
+            data: [<?php echo $intel_data ?>]
+        }
+    ]
+};
+</script>
+
+
+
+<h3>Top CPUs</h3>
+<p>These are the 5 most popular CPUs</p>
+<table>
+<?php echo Stats_Controller::$top_cpus; ?>
+</table>
 
 <h3>GPU SLI/Crossfire Distribution</h3>
 <p>This chart shows how many GPU's people have in each system.</p>
@@ -101,6 +158,9 @@ window.onload = function(){
 
     var cpu_core_canvas = document.getElementById("cpu_core_distribution").getContext("2d");
     var cpu_core_distribution_RadarChart = new Chart(cpu_core_canvas).Radar(core_data);
+
+    var cpu_speed_canvas = document.getElementById("cpu_speed_distribution").getContext("2d");
+    var cpu_speed_distribution_RadarChart = new Chart(cpu_speed_canvas).Radar(speed_data);
 
     var gpu_count_canvas = document.getElementById("gpu_count_distribution").getContext("2d");
     var gpu_count_chart = new Chart(gpu_count_canvas).Pie(gpu_count_data);

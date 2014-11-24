@@ -1,4 +1,3 @@
-
 SetEnv wsgi_max_requests 10
 RewriteEngine On
 RewriteCond %{HTTPS} off

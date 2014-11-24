@@ -6,7 +6,7 @@ class Stats_Model extends Model {
 		parent::__construct();
 	}
 
-	// Select CPUs in used for comparison
+	// Selects cpu cores by make.
 	public function get_cpu_core_distribution($make) {
 		$query = "	SELECT 
 						COUNT(builder_id) AS count, 
@@ -27,6 +27,7 @@ class Stats_Model extends Model {
 		return $this->return_query($query, array($make));
 	}
 
+	// Gets the entire range of CPU cores in the database.
 	public function get_cpu_core_range() {
 		$query = "	SELECT
 						DISTINCT(cores)
@@ -38,10 +39,11 @@ class Stats_Model extends Model {
 		return $this->return_query($query);
 	}
 
+	// Gets speed of all CPUs
 	public function get_cpu_speed_distribution($make) {
 		$query = "	SELECT 
 						COUNT(builder_id) AS count, 
-						clock_speed 
+						clock_speed AS speed
 					FROM 
 						computers, 
 						cpus, 
@@ -56,6 +58,19 @@ class Stats_Model extends Model {
 		return $this->return_query($query, array($make));
 	}
 
+	// Gets the range of all CPU speeds
+	public function get_cpu_speed_range() {
+		$query = "	SELECT
+						DISTINCT(clock_speed) AS speed
+					FROM
+						cpus
+					ORDER BY
+						speed";
+
+		return $this->return_query($query);
+	}
+
+	// Gets the number of GPUS per system
 	public function get_gpu_counts() {
 		$query = "	SELECT 
 						COUNT(builder_id) AS user_count, 
@@ -70,7 +85,7 @@ class Stats_Model extends Model {
 		return $this->return_query($query);
 	}
 
-	// Bar graph bar set for each speed. size x count?
+	// Bar graph set for each speed. size x count?
 	public function get_ram_distribution() {
 		$query = "	SELECT 
 						COUNT(builder_id) AS count, 
@@ -88,11 +103,14 @@ class Stats_Model extends Model {
 		return $this->return_query($query);
 	}
 
+	// List of most popular CPUs
 	public function get_top_5_cpus() {
 		$query = "	SELECT 
 						COUNT(computer_id) AS count,
 						comp.cpu_id, 
-						CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu
+						CONCAT(cpu_makers.name, ' ', cpus.model) AS model,
+						cpus.cores,
+						cpus.clock_speed AS speed
 					FROM 
 						computers AS comp, 
 						cpus,
@@ -111,6 +129,7 @@ class Stats_Model extends Model {
 		return $this->return_query($query);
 	}
 
+	// idk...
 	public function get_computer_standing($computer_id) {
 		$query = "";
 
