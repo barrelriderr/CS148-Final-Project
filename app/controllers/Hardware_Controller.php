@@ -3,9 +3,9 @@
 class Hardware_Controller extends Controller{
 
 	public static $input = [];
-	public static $build_name = null;
-	public static $finished_build;
-	public static $build_id = null;
+	public static $computer_name = null;
+	public static $finished_computer;
+	public static $computer_id = null;
 	private static $cpu_list = [];
 	private static $gpu_list = [];
 	private static $ram_list = [];
@@ -27,24 +27,24 @@ class Hardware_Controller extends Controller{
 	}
 
 	public function add() {
-		$build_id = filter_input(INPUT_GET, "bid", FILTER_VALIDATE_INT);
+		$computer_id = filter_input(INPUT_GET, "bid", FILTER_VALIDATE_INT);
 
-		// Get Build Name
-		if (isset($build_id)){
-			static::$build_id = $build_id;
-			$results = $this->model->get_build($build_id);
-			static::$build_name = $results[0]['name'];
+		// Get Computer Name
+		if (isset($computer_id)){
+			static::$computer_id = $computer_id;
+			$results = $this->model->get_computer($computer_id);
+			static::$computer_name = $results[0]['name'];
 
 			if ($results[0]['cpu_id'] == null) {
-				static::$finished_build = false;
+				static::$finished_computer = false;
 			}else {
-				static::$finished_build = true;
+				static::$finished_computer = true;
 			}
 		}
 
-		if (static::$build_name == null){
+		if (static::$computer_name == null){
 			// Handle error
-			View::make('add/build_not_found');
+			View::make('add/computer_not_found');
 
 		}else {
 			if ($_SERVER["REQUEST_METHOD"] == 'POST') {
@@ -123,15 +123,15 @@ class Hardware_Controller extends Controller{
 										$gpu_count,
 										$ram_speed,
 										$ram_size,
-										$build_id,
+										$computer_id,
 										Controller::get_user_id()
 						);
 					if($this->model->add_hardware($computer_specs)) {
 						View::redirect("account", "success=1");
 					}
 				}
-			}else if (static::$finished_build == true) {
-				$old_hardware = $this->model->get_hardware(static::$build_id);
+			}else if (static::$finished_computer == true) {
+				$old_hardware = $this->model->get_hardware(static::$computer_id);
 
 				$cpu_make = $old_hardware[0]['cpu_maker'];
 				$gpu_make = $old_hardware[0]['gpu_maker'];

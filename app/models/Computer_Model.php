@@ -17,6 +17,18 @@ class Computer_Model extends Model {
 		return false;
 	}
 
+	public function get_tags() {
+		$query = "SELECT tag_id, tag FROM tags";
+
+		return $this->return_query($query);
+	}
+
+	public function get_colors() {
+		$query = "SELECT color_id, color FROM colors";
+
+		return $this->return_query($query);
+	}
+
 	public function delete_computer($computer_id){
 		$query = "	DELETE FROM 
 						computers 
@@ -29,15 +41,25 @@ class Computer_Model extends Model {
 		return $this->binary_query($query, array($computer_id, $user_id));
 	}
 
-	public function insert_computer($builder_id, $name, $description, $color, $purpose) {
+	public function insert_computer($builder_id, $name, $description, $color, $tags) {
 
-		$query = 'INSERT INTO computers (builder_id, name, description, color, purpose) VALUES (?, ?, ?, ?, ?)';
+		$query = 'INSERT INTO computers (builder_id, name, description, color) VALUES (?, ?, ?, ?)';
 
-		$success = $this->binary_query($query, array($builder_id, $name, $description, $color, $purpose));
+		$success = $this->binary_query($query, array($builder_id, $name, $description, $color));
 
-		// Get id of last insert
-		$build_id = $this->last_insert();
+		$last_insert = $this->last_insert();
+		$computer_id = $last_insert[0][0];
 
-		return $build_id[0][0];
+		foreach ($tags as $value) {
+			$id_and_tags[] = $computer_id;
+			$id_and_tags[] = $value;
+			$values_array[] = "(?, ?)";
+		}
+
+		$query = "INSERT INTO computer_tags (computer_id, tag_id) VALUES ".implode(", ", $values_array);
+
+		$success_2 = $this->binary_query($query, $id_and_tags);
+
+		return $computer_id;
 	}
 }

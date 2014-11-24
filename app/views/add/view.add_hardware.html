@@ -1,9 +1,9 @@
 <?php
-View::$title = "Add Hardware -".Hardware_Controller::$build_name;
+View::$title = "Add Hardware -".Hardware_Controller::$computer_name;
 View::head();
 ?>
-<h1><?php echo (Hardware_Controller::$finished_build) ? "UPDATE" : "ADD"?> HARDWARE</h1>
-<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?bid=".Hardware_Controller::$build_id ?>" method="POST">
+<h1><?php echo (Hardware_Controller::$finished_computer) ? "UPDATE" : "ADD"?> HARDWARE</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?bid=".Hardware_Controller::$computer_id ?>" method="POST">
 
 
     <p>Please enter the hardware information for the computer that you just registered.</p>
@@ -60,9 +60,9 @@ View::head();
     </fieldset>
     <fieldset>
         <?php 
-        $id = Hardware_Controller::$build_id;
+        $id = Hardware_Controller::$computer_id;
         $delete_html = "<a href='deleteComputer.php?id=$id' class='danger button'>DELETE</a>";
-        echo (Hardware_Controller::$finished_build) ? $delete_html : ""
+        echo (Hardware_Controller::$finished_computer) ? $delete_html : ""
         ?>
         <input type="submit" value="FINISH" class="good button"/>
     </fieldset>

@@ -1,0 +1,31 @@
+<?php
+View::$title = "Add Computer";
+View::head();
+?>
+<h1>ADD COMPUTER</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+    <?php 
+        // ERRORS
+        Controller::display_errors();
+
+        // Input
+        $input = Computer_Controller::$input;
+    ?>
+    <fieldset>
+    <legend>Computer</legend>
+        <input type="text" placeholder="Computer Name" name="name" value="<?php echo $input['name'] ?>"/><br>
+        <textarea name="description" placeholder="Tell us the story of your computer..." rows="4" cols="45"><?php echo $input['description'] ?></textarea>
+    </fieldset>
+    <fieldset>
+    <legend>Details</legend>
+        <select name="color">
+            <option value="0">Computer Color...</option>
+            <?php Computer_Controller::make_color_list(); ?>
+        </select><br>
+        Purpose:<br>
+        <?php Computer_Controller::make_tag_list(); ?>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="ADD" class="good button"/>
+    </fieldset>
+</form>

@@ -111,9 +111,9 @@ class Stats_Model extends Model {
 		return $this->return_query($query);
 	}
 
-	public function get_computer_standing($build_id) {
+	public function get_computer_standing($computer_id) {
 		$query = "";
 
-		return $this->return_query($query, array($build_id));
+		return $this->return_query($query, array($computer_id));
 	}
 }

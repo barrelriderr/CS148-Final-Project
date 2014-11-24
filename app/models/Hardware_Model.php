@@ -48,7 +48,7 @@ class Hardware_Model extends Model {
 		return $this->return_query($query, array($computer_id, $user_id));
 	}
 
-	public function get_build($computer_id) {
+	public function get_computer($computer_id) {
 
 		$query = "SELECT 
 						name,

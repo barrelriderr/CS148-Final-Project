@@ -3,25 +3,26 @@
 class Computer_Controller extends Controller{
 
 	public static $input = [];
-	private $PURPOSES_LIST;
-	private $COLORS_LIST;
+	private static $tag_list = [];
+	private static $color_list = [];
 
-	public function __construct() {
-		$this->PURPOSES_LIST = array(8 => 'video', 4 => 'gaming', 2 => 'school', 1 => 'work');
-		$this->COLORS_LIST = array('Build Color...', 'Black', 'White', 'Red', 'Blue', 'Yellow', 'Green', 'Pink', 'Grey');
-	}
+	public function __construct() { }
 
 
 	public function add() {
 
+		require("../app/models/Computer_Model.php");
+		$this->model = new Computer_Model();
+
+		static::$tag_list = $this->model->get_tags();
+		static::$color_list = $this->model->get_colors();
+
+
 		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 			$name = trim(htmlentities($_POST['name']));
 			$description = trim(htmlentities($_POST['description']));
-			$color = trim(htmlentities($_POST['color']));
-			$purposes = $_POST['purposes'];
-
-			require("../app/models/Computer_Model.php");
-			$this->model = new Computer_Model();
+			$color_input = intval(trim(htmlentities($_POST['color'])));
+			$tags_input = $_POST['tags'];
 
 			if ($name == "") {
 				static::$error_messages['name'] = "Provide a name.";
@@ -35,38 +36,37 @@ class Computer_Controller extends Controller{
 			static::$input['name'] = $name;
 
 			if (strlen($description) > 60000) {
-				static::$error_messages['description'] = "Description is longer than 60 000 characters.";
+				static::$error_messages['description'] = "Description is longer than 60,000 characters.";
 			}
 			
 			static::$input['description'] = $description;
 
-			if ($color == $this->COLORS_LIST[0]) {
-				static::$error_messages['color'] = "Please select a build color.";
-			}else {
-				static::$error_messages['color'] = "Please select a valid color.";
 
-				foreach ($this->COLORS_LIST as $key => $valid_color) {
-					if ($valid_color == $color) {
-						static::$input['color.'.$color] = ' selected';
-						unset(static::$error_messages['color']);
+
+			if ($color_input != null) {
+				foreach (static::$color_list as $valid_color) {
+					if ($valid_color['color_id'] == $color_input) {
+						static::$input['color'] = $color_input;
 						break;
 					}
 				}
 			}
 
-			if ($purposes != null) {
+			if (static::$input['color'] == null) {
+				static::$error_messages['color'] = "Please select a valid color.";
+			}
 
-				$purposes_value = 0;
-
-				foreach ($this->PURPOSES_LIST as $key => $value) {
-					foreach ($purposes as $purpose) {
-						if ($value == $purpose)
-							static::$input['purposes.'.$value] = " checked";
-							$purposes_value += $key;
-					}
+			if ($tags_input != null) {
+				foreach ($tags_input as $tag) {
+					foreach (static::$tag_list as $valid_tag)
+						if($valid_tag['tag_id'] == $tag) {
+							static::$input['tags'][] = intval($tag);
+							break;
+						}
 				}
-			}else {
-				static::$error_messages['purposes'] = "Select at least 1 purpose.";
+			}
+			if (static::$input['tags'] == null) {
+				static::$error_messages['tags'] = "Select at least 1 tag.";
 			}
 
 			static::$input['name'] = $name;
@@ -74,20 +74,53 @@ class Computer_Controller extends Controller{
 
 			if (count(static::$error_messages) == 0) {				
 
-				$build_id = $this->model->insert_computer(Controller::get_user_id(),
+				$computer_id = $this->model->insert_computer(Controller::get_user_id(),
 															static::$input['name'],
 															static::$input['description'],
-															$color,
-															$purposes_value
+															static::$input['color'],
+															static::$input['tags']
 															);
-				if ($build_id) {
+				if ($computer_id) {
 					ob_end_clean(); // Destroy buffer
-					header("Location: addHardware.php?bid=$build_id");
+					header("Location: addHardware.php?bid=$computer_id");
 					exit();
 				}
 			}
 		}
-		View::make('add/add_build');
+		View::make('add/add_computer');
+	}
+
+	public static function make_color_list() {
+		$html = "";
+		$input = static::$input["color"];
+
+		foreach (static::$color_list as $color) {
+			$html .= '<option value="'.$color['color_id'].'"';
+			if ($color['color_id'] == $input) {
+				$html .= " selected";
+			}
+			$html .= ">".$color['color']."</option>\n"; 
+		}
+
+		echo $html;
+	}
+
+	public static function make_tag_list() {
+		
+		$html = "";
+		$input = static::$input["tags"];
+
+		foreach (static::$tag_list as $tag) {
+			$html .= '<input type="checkbox" name="tags[]" value="'.$tag['tag_id'].'"';
+			foreach ($input as $value) {
+				if ($tag['tag_id'] == $value) {
+					$html .= " checked";
+					break;
+				}
+			}
+			$html .= ">".$tag['tag']."<br>\n"; 
+		}
+		echo $html;
 	}
 
 	public function delete(){
