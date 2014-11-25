@@ -32,7 +32,7 @@ class Hardware_Model extends Model {
 						ram_size,
 						ram_speed,
 						cpus.maker_id AS cpu_maker,
-						gpus.make AS gpu_maker
+						gpus.maker_id AS gpu_maker
 					FROM
 						computers,
 						cpus,
@@ -83,38 +83,13 @@ class Hardware_Model extends Model {
 
 	public function get_gpu_list($make) {
 		$query = "SELECT 
-						gpu_id, model 
-					FROM (
-						SELECT 
-							gpu_id + .5 AS gpu_id,
-							CONCAT(details.make, ' ', series, ' ', model, ' ', super_name) AS model
-						 FROM 
-						 	gpus, 
-						 	gpu_makers AS details 
-						 WHERE 
-						 	gpus.make LIKE details.maker_id 
-						 	AND super_version=1 
-						 	AND details.make LIKE ? 
-			 		UNION ALL
-			 			SELECT 
 			 				gpus.gpu_id,
-			 				CONCAT(details.make, ' ', series, ' ', model) AS model 
+			 				CONCAT(details.name, ' ', series, ' ', model, ' ', suffix) AS model 
 			 			FROM 
 			 				gpus, gpu_makers AS details 
 						 WHERE 
-						 	gpus.make LIKE details.maker_id 
-						 	AND details.make LIKE ?
-			 		) AS cards 
-					GROUP BY model";
-					
-		$query = "SELECT 
-			 				gpus.gpu_id,
-			 				CONCAT(details.make, ' ', series, ' ', model) AS model 
-			 			FROM 
-			 				gpus, gpu_makers AS details 
-						 WHERE 
-						 	gpus.make LIKE details.maker_id 
-						 	AND details.make LIKE ?";
+						 	gpus.maker_id LIKE details.maker_id 
+						 	AND details.name LIKE ?";
 
 		$results = $this->return_query($query, array($make));
 
@@ -126,7 +101,9 @@ class Hardware_Model extends Model {
 						ram_id, 
 						speed
 					FROM 
-						ram_speeds";
+						ram_speeds
+					ORDER BY
+						speed";
 
 		$results = $this->return_query($query);
 

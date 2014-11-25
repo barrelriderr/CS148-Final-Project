@@ -14,11 +14,25 @@ class Register_Controller extends Controller{
 			$this->model = new Register_Model();
 
 			// Sanitize
+			$username = trim(htmlentities($_POST['username']));
 			$email = trim(htmlentities($_POST['email']));
 			$password = trim(htmlentities($_POST['password']));
 			$confirm_password = trim(htmlentities($_POST['confirm_password']));
 
 			// Validate
+			if ($username =="") {
+				static::$error_messages['username'] = "Provide an username.";
+
+			}else if(!preg_match ("/^([[:alnum:]]|-|\.|_|')+$/", $username)){
+				static::$error_messages['username'] = "Invalid username.";
+
+			}else {
+				$unique_username = $this->model->is_unique_username($username);
+				if (!$unique_username) {
+					static::$error_messages['username'] = "Username already in use.";
+				}
+			}
+
 			if ($email == "") {
 				static::$error_messages['email'] = "Provide an email.";
 
@@ -36,7 +50,7 @@ class Register_Controller extends Controller{
 
 			if ($password == "") {
 				static::$error_messages['password'] = "Provide a password.";
-			}else if (!preg_match_all('$\S*(?=\S{8,100})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$', $password)) {
+			}else if (!preg_match_all('$\S*(?=\S{8,100})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$', $password, $match)) {
 				static::$error_messages['password'] = "Password must be between 8 and 100 characters with at least 1 upper and lower case letter.";
 			}
 
@@ -47,18 +61,25 @@ class Register_Controller extends Controller{
 				static::$error_messages['confirm_password'] = "Passwords do not match.";
 			}
 
-			static::$input = array('email' => $email, 'password' => $password, 'confirm_password' => $confirm_password);
+			static::$input = array('username' => $username, 'email' => $email, 'password' => $password, 'confirm_password' => $confirm_password);
 			
 			// Validation check
 			if (count(static::$error_messages) == 0) {
 
 				// Insert data
+				$email = static::$input['username'];
 				$email = static::$input['email'];
 				$password = static::$input['password'];
 
 				$password = hash('sha256', $password);
 
-				if($this->model->insert_user($email, $password)) {
+				if($this->model->insert_user($username, $email, $password)) {
+					$results = $this->model->get_last_user_key();
+					
+					$user_id = $results['user_id'];
+					$key = $results['key'];
+
+					$this->send_confirmation_email($email, $username, $user_id, $key);
 					View::make('registration/registration_success');
 					return;
 				}else {
@@ -71,19 +92,36 @@ class Register_Controller extends Controller{
 		View::make('registration/register');
 	}
 
+	private function send_confirmation_email($to, $username, $user_id, $key) {
+        
+		$from = "btnewton@uvm.edu";
+
+		$subject = "Buildr Confirmation";
+
+	    $message = "Please confirm your address by following the link below:\n\n";
+
+	    $message .= htmlspecialchars("https://".$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'])."?id=$user_id&key=$key";
+
+	    $headers = "From: " . $from . "\r\n";
+
+	    /* this line actually sends the email */
+	    return mail($to, $subject, $message, $headers);
+	}
+
 	public function confirmation() {
 		
-		$user_id = intval(trim(htmlentities($_GET[''])));
-		$key =  trim(htmlentities($_GET['']));
+		$user_id = intval(trim(htmlentities($_GET['id'])));
+		$key =  trim(htmlentities($_GET['key']));
 
-		if ($user_id != null && $key != null) {
-			$this->model = new Register_Model();
-			
-			if ($this->model->check_user($user_id, $key)) {
-				$this->model->confirm_user($user_id, $key);
-				return;
-			}
+		require("../app/models/Register_Model.php");
+		$this->model = new Register_Model();
+		
+		if ($this->model->check_user($user_id, $key)) {
+			$this->model->confirm_user($user_id, $key);
+			View::make('confirmation/confirmation_success');
+		}else {
+			View::make('confirmation/confirmation_failure');
 		}
-		View::make('confirmation');
+		
 	}
 }

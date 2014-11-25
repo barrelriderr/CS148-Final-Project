@@ -36,6 +36,7 @@ class Admin_Controller extends Controller{
 		$user_information = $this->model->get_user_information($user_id);
 
 		$email = htmlentities($user_information[0]['email']);
+		$email = htmlentities($user_information[0]['username']);
 		$date = htmlentities($user_information[0]['date_joined']);
 		if(htmlentities($user_information[0]['confirmed']) == 1) {
 			$confirmed = "Yes";
@@ -43,22 +44,26 @@ class Admin_Controller extends Controller{
 			$confirmed = "No";
 		}
 
-		static::$user_html = "<li>User id: $user_id</li>\n";
-		static::$user_html .= "<li>Email: $email</li>\n";
-		static::$user_html .= "<li>Joined: $date</li>\n";
-		static::$user_html .= "<li>Confirmed: $confirmed</li>\n";
+		$html = "<li>User id: $user_id</li>\n";
+		$html .= "<li>Username: $username</li>\n";
+		$html .= "<li>Email: $email</li>\n";
+		$html .= "<li>Joined: $date</li>\n";
+		$html .= "<li>Confirmed: $confirmed</li>\n";
+
+		static::$user_html = $html;
 
 		View::make("admin/user");
 	}
 
 	private function user_list() {
-		$html = "";
+		
+		$html = "<tr><th>id</th><th>username</th><th>email</th><th>joined</th><th>confirmed</th></tr>";
 
 		$user_list = $this->model->get_users();
 
 		foreach ($user_list as $key => $value) {
 			$user_id = $value['user_id'];
-			$id = '<a href="editUsers.php?uid='.$user_id.'">'.$user_id.'</a>';
+			$username = '<a href="editUsers.php?uid='.$user_id.'">'.$value['username'].'</a>';
 			$email = $value['email'];
 			$joined = $value['date_joined'];
 
@@ -68,7 +73,7 @@ class Admin_Controller extends Controller{
 				$confirmed = "No";
 			}
 
-			$html .= "<tr><td>$id</td><td>$email</td><td>$joined</td><td>$confirmed</td></tr>\n";
+			$html .= "<tr><td>$user_id</td><td>$username</td><td>$email</td><td>$joined</td><td>$confirmed</td></tr>\n";
 		}
 
 		static::$user_html = $html;
@@ -108,7 +113,6 @@ class Admin_Controller extends Controller{
 	}
 
 	public function editComputers() {
-		
 		
 		View::make('admin/edit_computers');
 	}

@@ -2,9 +2,9 @@
 
 class Stats_Controller extends Controller{
 
-	public static $cpu_core_distribution = [];
-	public static $cpu_speed_distribution = [];
-	public static $gpu_count = [];
+	public static $cpu_core_distribution = array();
+	public static $cpu_speed_distribution = array();
+	public static $gpu_count = array();
 	public static $top_cpus;
 	public static $top_colors;
 	public static $top_computers;
@@ -26,7 +26,7 @@ class Stats_Controller extends Controller{
 	private function get_gpu_count_data() {
 		$gpu_count_data = $this->model->get_gpu_counts();
 
-		$gpu_count = [];
+		$gpu_count = array();
 		$j = 0;
 
 		for ($i=0; $i < 5; $i++) { 
@@ -80,16 +80,14 @@ class Stats_Controller extends Controller{
 	private function get_top_computers() {
 		$top_computers = $this->model->get_top_computers(5);
 
-		$html = "<tr><th>Computer</th><th>Creator</th><th>Likes</th></tr>";
+		$html = "<tr><th>Computer</th><th>Creator</t`h><th>Likes</th></tr>";
 
 		foreach ($top_computers as $computer) {
 			$name = $computer['name'];
-			$email = $computer['email'];
+			$username = $computer['username'];
 			$likes = $computer['count'];
 
-			$creator = explode("@", $email);
-
-			$html .= "<tr><td>$name</td><td>$creator[0]</td><td>$likes</td></tr>\n";
+			$html .= "<tr><td>$name</td><td>$username</td><td>$likes</td></tr>\n";
 		}
 
 		static::$top_computers = $html;
@@ -107,10 +105,10 @@ class Stats_Controller extends Controller{
 		}
 
 
-		$amd_cores = [];
+		$amd_cores = array();
 		$amd_counter = 0;
 
-		$intel_cores = [];
+		$intel_cores = array();
 		$intel_counter = 0;
 
 		foreach ($core_range as $core_count) {
@@ -158,10 +156,10 @@ class Stats_Controller extends Controller{
 		}
 
 
-		$amd_speeds = [];
+		$amd_speeds = array();
 		$amd_counter = 0;
 
-		$intel_speeds = [];
+		$intel_speeds = array();
 		$intel_counter = 0;
 
 		foreach ($speed_range as $speed) {

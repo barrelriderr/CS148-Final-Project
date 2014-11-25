@@ -12,6 +12,7 @@ class Admin_Model extends Model {
 	public function get_users() {
 		$query = "	SELECT 
 						user_id,
+						username,
 						email,
 						date_joined,
 						confirmed
@@ -26,6 +27,7 @@ class Admin_Model extends Model {
 	public function get_user_information($user_id) {
 		$query = "	SELECT 
 						user_id,
+						username,
 						email,
 						date_joined,
 						confirmed

@@ -2,9 +2,9 @@
 
 class Computer_Controller extends Controller{
 
-	public static $input = [];
-	private static $tag_list = [];
-	private static $color_list = [];
+	public static $input = array();
+	private static $tag_list = array();
+	private static $color_list = array();
 	public static $computer_list;
 
 	public function __construct() { }
@@ -111,6 +111,10 @@ class Computer_Controller extends Controller{
 		$html = "";
 		$input = static::$input["tags"];
 
+		if($input == null) {
+			$input = array();
+		}
+
 		foreach (static::$tag_list as $tag) {
 			$html .= '<input type="checkbox" name="tags[]" value="'.$tag['tag_id'].'"';
 			foreach ($input as $value) {
@@ -177,7 +181,7 @@ class Computer_Controller extends Controller{
 		if(Controller::is_signed_in()){
 			$user_likes = $this->model->get_likes();
 		}else {
-			$user_likes = [];
+			$user_likes = array();
 		}
 
 		$html = "<tr><th>Name</th><th>Creator</th><th>CPU</th><th>GPU</th><th>Likes</th><th></th></tr>\n";
@@ -185,14 +189,17 @@ class Computer_Controller extends Controller{
 		foreach ($computers as $key => $computer) {
 			$computer_id = $computer['computer_id'];
 			$name = $computer['name'];
-			$email = $computer['email'];
+			$username = $computer['username'];
 			$cpu = $computer['cpu_model'];
 			$gpu = $computer['gpu_model'];
+
+			if ($gpu == null) {
+				$gpu = "N/A";
+			}
+
 			$likes = $computer['count'];
 
-			$creator = explode("@", $email);
-
-			$html .= "<tr><td>$name</td><td>$creator[0]</td><td>$cpu</td><td>$gpu</td><td>$likes</td><td>";
+			$html .= "<tr><td>$name</td><td>$username</td><td>$cpu</td><td>$gpu</td><td>$likes</td><td>";
 
 			$like_html = "<a href='like.php?id=$computer_id'>like</a>";
 			

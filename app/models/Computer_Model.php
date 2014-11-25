@@ -7,7 +7,12 @@ class Computer_Model extends Model {
 	}
 
 	public function is_unique_name($name) {
-		$query = "SELECT name FROM computers WHERE name LIKE ?";
+		$query = "	SELECT 
+						name 
+					FROM 
+						computers 
+					WHERE 
+						name LIKE ?";
 		$results = $this->return_query($query, array($name));
 
 		if ($results == null) {
@@ -18,13 +23,21 @@ class Computer_Model extends Model {
 	}
 
 	public function get_tags() {
-		$query = "SELECT tag_id, tag FROM tags";
+		$query = "	SELECT 
+						tag_id, 
+						tag 
+					FROM 
+						tags";
 
 		return $this->return_query($query);
 	}
 
 	public function get_colors() {
-		$query = "SELECT color_id, color FROM colors";
+		$query = "SELECT 
+					color_id, 
+					color 
+				FROM 
+					colors";
 
 		return $this->return_query($query);
 	}
@@ -123,7 +136,7 @@ class Computer_Model extends Model {
 							CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu_model,
 							CONCAT(gpu_makers.name, ' ', gpus.model) AS gpu_model,
 							COUNT(likes.computer_id) AS count,
-							users.email
+							users.username
 						FROM
 							users,
 							cpus,
@@ -133,7 +146,10 @@ class Computer_Model extends Model {
 							computers AS comps
   							LEFT JOIN 
   								computer_likes AS likes 
-  								ON comps.computer_id = likes.computer_id
+  								ON comps.computer_id = likes.computer_id 
+  							LEFT JOIN
+  								gpus
+  								ON comps.gpu_id = gpus.gpu_id
 						WHERE
 							comps.cpu_id IS NOT NULL
 							AND users.user_id = comps.builder_id
@@ -141,6 +157,39 @@ class Computer_Model extends Model {
 							AND cpus.maker_id = cpu_makers.maker_id
 							AND comps.gpu_id = gpus.gpu_id
 							AND gpus.maker_id = gpu_makers.maker_id
+                        GROUP BY
+                        	comps.computer_id
+                        ORDER BY
+                        	comps.computer_id
+						LIMIT
+							500";
+
+			$query = "	SELECT
+							comps.computer_id,
+							comps.name,
+							CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu_model,
+							CONCAT(gpu_makers.name, ' ', gpus.model) AS gpu_model,
+							COUNT(likes.computer_id) AS count,
+							users.username
+						FROM
+							users,
+							cpus,
+							cpu_makers,
+							computers AS comps
+  							LEFT JOIN 
+  								computer_likes AS likes 
+  								ON comps.computer_id = likes.computer_id 
+  							LEFT JOIN
+  								gpus
+  								ON comps.gpu_id = gpus.gpu_id
+  							LEFT JOIN
+  								gpu_makers
+  								ON gpu_makers.maker_id = gpus.maker_id
+						WHERE
+							comps.cpu_id IS NOT NULL
+							AND users.user_id = comps.builder_id
+							AND comps.cpu_id = cpus.cpu_id
+							AND cpus.maker_id = cpu_makers.maker_id
                         GROUP BY
                         	comps.computer_id
                         ORDER BY

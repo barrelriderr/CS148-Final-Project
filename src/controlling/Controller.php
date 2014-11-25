@@ -37,11 +37,11 @@ class Controller {
 		return intval($_SESSION['user_id']);
 	}
 
-	public static function is_admin($user_id = null) {
-		if (static::get_user_id() == 7 || $user_id == 7) {
+	public static function is_admin() {
+		if (!Controller::get_alias() && $_SESSION['is_admin'] == 1){
 			return true;
 		}
-		
+
 		return false;
 	}
 

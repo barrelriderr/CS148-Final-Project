@@ -13,6 +13,7 @@ View::head();
         $input = Register_Controller::$input;
     ?>
     <fieldset>
+        <input type="username" placeholder="username" name="username" value="<?php echo $input['username'] ?>"/><br>
         <input type="email" placeholder="email" name="email" value="<?php echo $input['email'] ?>"/><br>
         <input type="password" placeholder="password" name="password" value="<?php echo $input['password'] ?>"/><br>
         <input type="password" placeholder="confirm password" name="confirm_password" value="<?php echo $input['confirm_password'] ?>"/><br>

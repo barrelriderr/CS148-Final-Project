@@ -1,5 +1,6 @@
 <?php
-
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+ini_set('display_errors','On');
 // Enable error logging
 require "../src/logger/Logger.php";
 // Enable controllers

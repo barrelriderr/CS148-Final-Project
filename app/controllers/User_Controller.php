@@ -3,40 +3,43 @@
 class User_Controller extends Controller {
 
 	public static $input = array();
-	public static $computer_list = [];
-	public static $unfinished_computer_list = [];
-	public static $email;
-
+	public static $computer_list = array();
+	public static $unfinished_computer_list = array();
+	public static $username;
 
 	public function sign_in() {
 
 		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 
-			$email = trim(htmlentities($_POST['email']));
+			$account = trim(htmlentities($_POST['account']));
 			$password = trim(htmlentities($_POST['password']));
 
-			static::$input['email'] = $email;
+			static::$input['account'] = $account;
 
-			if (strtoupper($email) == "GUEST") {
+			if (strtoupper($account) == "GUEST") {
 				// Guest account
-				$email = "guest";
+				$account = "guest";
 			}else {
-				if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match_all('$\S*(?=\S{8,100})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$', $password)) {
+				if ($account == null || !preg_match_all('$\S*(?=\S{8,100})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$', $password, $matches)) {
 					static::$error_messages['signin'] = "Invalid credentials";
+					echo "didn't check";
 				}
 			}
 			
 			if (count(static::$error_messages) == 0) {
 				require("../app/models/User_Model.php");
 				$this->model = new User_Model();
-				if ($email == "guest") {
+				if ($account == "guest") {
 					$user_id = 1;
 				}else {
-					$user_id = $this->model->signin($email, $password);
+					$result = $this->model->signin($account, $password);
+					$user_id = $result[0]['user_id'];
+					$is_admin = $result[0]['is_admin'];
 				}
 
 				if ($user_id) {
 					$_SESSION['user_id'] = intval($user_id);
+					$_SESSION['is_admin'] = intval($is_admin);
 					$_SESSION['signed_in'] = time();
 					
 					View::redirect('account');
@@ -68,9 +71,9 @@ class User_Controller extends Controller {
 			require("../app/models/User_Model.php");
 			$this->model = new User_Model();
 
-			$email = $this->model->get_email($user_id);
+			$username = $this->model->get_username($user_id);
 
-			static::$email = htmlentities($email[0]['email']);
+			static::$username = htmlentities($username[0]['username']);
 
 			static::$computer_list = $this->model->get_users_computers($user_id);
 

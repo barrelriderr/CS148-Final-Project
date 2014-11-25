@@ -6,17 +6,23 @@ class User_Model extends Model {
 		parent::__construct();
 	}
 
-	public function signin($email, $password) {
+	// Allows username and email value for $account.
+	public function signin($account, $password) {
 
 		$hashed_password = hash('sha256', $password);
 		
-		$query = "SELECT user_id FROM users WHERE email LIKE ? AND password LIKE ? AND confirmed=1";
+		$query = "	SELECT 
+						user_id,
+						is_admin
+					FROM 
+						users 
+					WHERE 
+						(username LIKE ?
+						 OR email LIKE ?) 
+						AND password LIKE ? 
+						AND confirmed=1";
 
-		$results = $this->return_query($query, array($email, $hashed_password));
-
-		$user_id = intval($results[0][0]);
-
-		return $user_id;
+		return $this->return_query($query, array($account, $account, $hashed_password));
 	}
 
 	public function get_users_computers($user_id){
@@ -46,6 +52,18 @@ class User_Model extends Model {
 
 		return $this->return_query($query, array($user_id));
 	}
+
+	public function get_username($user_id) {
+		$query = "	SELECT
+						username
+					FROM
+						users
+					WHERE
+						user_id=?";
+
+		return $this->return_query($query, array($user_id));
+	}
+
 
 	public function get_users_unfinished_computers($user_id) {
 		$query = "	SELECT 

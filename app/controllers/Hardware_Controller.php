@@ -2,13 +2,13 @@
 
 class Hardware_Controller extends Controller{
 
-	public static $input = [];
+	public static $input = array();
 	public static $computer_name = null;
 	public static $finished_computer;
 	public static $computer_id = null;
-	private static $cpu_list = [];
-	private static $gpu_list = [];
-	private static $ram_list = [];
+	private static $cpu_list = array();
+	private static $gpu_list = array();
+	private static $ram_list = array();
 
 	public function __construct() {
 		require("../app/models/Hardware_Model.php");

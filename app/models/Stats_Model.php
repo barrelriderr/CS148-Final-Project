@@ -157,7 +157,7 @@ class Stats_Model extends Model {
 		$query = "	SELECT
 						COUNT(likes.computer_id) AS count,
 						comps.name AS name,
-						email
+						username
 					FROM
 						users,
 						computers AS comps,
