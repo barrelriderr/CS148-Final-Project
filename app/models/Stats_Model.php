@@ -98,10 +98,35 @@ class Stats_Model extends Model {
 					WHERE 
 						c.ram_size = ram_sizes.ram_id 
 						AND c.ram_speed = ram_speeds.ram_id 
-					GROUP BY speed, size";
+					GROUP BY 
+						size
+					ORDER BY
+						speed";
 
 		return $this->return_query($query);
 	}
+
+	public function get_ram_speed_range() {
+		$query = "	SELECT
+						speed
+					FROM
+						ram_speeds
+					ORDER BY
+						speed ASC";
+
+		return $this->return_query($query);
+	}
+
+	public function get_ram_size_range() {
+		$query = "	SELECT
+						DISTINCT(size) as size
+					FROM
+						ram_sizes";
+
+		return $this->return_query($query);
+	}
+
+
 
 	// List of most popular CPUs
 	public function get_top_cpus($count = 5) {
@@ -175,10 +200,23 @@ class Stats_Model extends Model {
 		return $this->return_query($query, array($count));
 	}
 
-	// idk...
-	public function get_computer_standing($computer_id) {
-		$query = "";
+	public function get_top_tags($count = 5) {
 
-		return $this->return_query($query, array($computer_id));
+		$query = "	SELECT
+						COUNT(ct.tag_id) AS count,
+						tags.tag
+					FROM
+						computer_tags AS ct,
+						tags
+					WHERE
+						ct.tag_id = tags.tag_id
+					GROUP BY
+						ct.tag_id
+					ORDER BY
+						count DESC
+					LIMIT
+						$count";
+
+		return $this->return_query($query);
 	}
 }

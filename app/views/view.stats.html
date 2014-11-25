@@ -34,8 +34,8 @@ View::head();
 <p>This chart shows how many cores each computer has in it's CPU.</p>
 <div class="legend">
     <div class="legend-title">Legend</div>
-    <div class="amd">AMD</div>
-    <div class="intel">Intel</div>
+    <div class="amd legend-item">AMD</div>
+    <div class="intel legend-item">Intel</div>
 </div>
 <canvas id="cpu_core_distribution" class="radar_chart" width="400" height="400"></canvas>
 <script>
@@ -80,8 +80,8 @@ var core_data = {
 <p>This chart shows the clock speeds of all computers. Note that a manufacturere may not make a CPU in some of the below clock speeds.</p>
 <div class="legend">
     <div class="legend-title">Legend</div>
-    <div class="amd">AMD</div>
-    <div class="intel">Intel</div>
+    <div class="amd legend-item">AMD</div>
+    <div class="intel legend-item">Intel</div>
 </div>
 
 <canvas id="cpu_speed_distribution" class="radar_chart" width="400" height="400"></canvas>
@@ -123,11 +123,20 @@ var speed_data = {
 };
 </script>
 
-<h3>Top CPUs</h3>
-<p>These are the 5 most popular CPUs</p>
-<table>
-<?php echo Stats_Controller::$top_cpus; ?>
-</table>
+<div class="left-section">
+    <h3>Top CPUs</h3>
+    <p>These are the 5 most popular CPUs</p>
+    <table>
+    <?php echo Stats_Controller::$top_cpus; ?>
+    </table>
+</div>
+<div class="right-section">
+    <h3>Popular Tasks</h3>
+    <p>These are the 5 most common ways people use their PCs</p>
+    <table>
+    <?php echo Stats_Controller::$top_tags; ?>
+    </table>
+</div>
 
 <h3>GPU SLI/Crossfire Distribution</h3>
 <p>This chart shows how many GPU's people have in each system.</p>
@@ -170,8 +179,67 @@ var gpu_count_data = [
     }
 
 ];
+</script>
+
+<h3>RAM Distribution</h3>
+<p>This chart shows the types of RAM people have in their systems.</p>
+<div class="legend">
+    <div class="legend-title">Legend</div>
+    <div class="legend-item" style="background-color: rgba(220,220,220,0.5);">4GB</div>
+    <div class="legend-item" style="background-color: rgba(151,187,205,0.5);">8GB</div>
+    <div class="legend-item" style="background-color: rgba(240,65,75,0.5);">16GB</div>
+    <div class="legend-item" style="background-color: rgba(90,200,115,0.5);">32GB</div>
+</div>
+<canvas id="ram_distribution" width="500" height="500"></canvas>
+<?php
+    $ram_data = Stats_Controller::$ram_distribution;
+?>
 
 
+<script>
+var ram_distribution_data = {
+    labels: [<?php echo $ram_data['labels']; ?>],
+    datasets: [
+        {
+            label: "4GB",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [<?php echo $ram_data['size_4']; ?>]
+        },
+        {
+            label: "8GB",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [<?php echo $ram_data['size_8']; ?>]
+        },
+        {
+            label: "16GB",
+            fillColor: "rgba(240,65,75,0.5)",
+            strokeColor: "rgba(240,65,75,0.8)",
+            highlightFill: "rgba(240,65,75,0.75)",
+            highlightStroke: "rgba(240,65,75,1)",
+            data: [<?php echo $ram_data['size_16']; ?>]
+        },
+        {
+            label: "32GB",
+            fillColor: "rgba(90,200,115,0.5)",
+            strokeColor: "rgba(90,200,115,0.8)",
+            highlightFill: "rgba(90,200,115,0.75)",
+            highlightStroke: "rgba(90,200,115,1)",
+            data: [<?php echo $ram_data['size_32']; ?>]
+        }
+    ]
+};
+
+
+</script>
+
+
+<script>
 window.onload = function(){
 
     var cpu_core_canvas = document.getElementById("cpu_core_distribution").getContext("2d");
@@ -182,6 +250,10 @@ window.onload = function(){
 
     var gpu_count_canvas = document.getElementById("gpu_count_distribution").getContext("2d");
     var gpu_count_chart = new Chart(gpu_count_canvas).Pie(gpu_count_data);
+
+    var ram_distribution_canvas = document.getElementById("ram_distribution").getContext("2d");
+    var ram_distribution_chart = new Chart(ram_distribution_canvas).Bar(ram_distribution_data);
+
 
 }
 </script>

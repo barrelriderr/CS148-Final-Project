@@ -33,25 +33,26 @@ h3:not(:first-child) {
 	border: 1px solid #000;
 	border-radius: 3px;
 	width: 70px;
-	height: 50px;
+	/*height: 50px;*/
 	margin: 5px;
 	background-color: #CCC;
 	box-shadow:  0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.amd {
-	background-color: #d0451b;
+.legend-item {
 	display: block;
 	width: 100%;
 	margin-top: 2px;
 }
 
+.amd {
+	background-color: #d0451b;
+	color: #000;
+}
+
 .intel {
 	background-color: #289EED;
-	display: block;
-	width: 100%;
 	color: #fff;
-	margin-top: 2px;
 }
 
 .legend-title {
