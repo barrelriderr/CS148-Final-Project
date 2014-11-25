@@ -8,14 +8,14 @@ View::head();
 <div id="top-section">
 	<h4>User: <?php echo User_Controller::$email ?></h4>
 	<?php echo ($_GET['success'] == 1) ? '<div id="success">Success!</div>' : ""?>
-	<a href="signout.php" id="signout" class="danger button">Sign out</a>
+	
 </div>
 <div id="left-section">
 	<h3>Your Computers</h3>
 	<p style="display: block;">
 		Update your computer information or add a new one.
 	</p>
-	<div style="width: 50%; float: left; margin-top:5px">
+	<div style="margin-top:5px">
 		<div style="height: 120px; overflow: scroll;">
 		<?php User_Controller::make_computer_list(User_Controller::$computer_list); ?>
 		</div>
@@ -25,15 +25,17 @@ View::head();
 		 ?>
 		 </div>
 	</div>
-	<div style="width: 50%; height=100%; float: right; text-align: center; margin-top: 40px;">
-		<a href="addComputer.php" class="good button">Add</a>
-	</div>
 </div>
 <div id="right-section">
+	<ul>
+		<li><a href="signout.php" class="danger button">Sign out</a></li>
+		<li><a href="addComputer.php" class="good button">Add Computer</a></li>
+		<li><a href="browse.php" class="good button">Browse</a></li>
 	<?php  
 		if(Controller::is_admin()) {
 			include("admin_section.html");
 		}
 	?>
+	</ul>
 </div>
 </article>

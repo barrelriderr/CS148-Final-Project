@@ -43,7 +43,14 @@ class Computer_Model extends Model {
 
 	public function insert_computer($builder_id, $name, $description, $color, $tags) {
 
-		$query = 'INSERT INTO computers (builder_id, name, description, color) VALUES (?, ?, ?, ?)';
+		$query = '	INSERT INTO 
+						computers 
+							(builder_id,
+							 name, 
+							 description, 
+							 color) 
+					VALUES 
+						(?, ?, ?, ?)';
 
 		$success = $this->binary_query($query, array($builder_id, $name, $description, $color));
 
@@ -56,10 +63,91 @@ class Computer_Model extends Model {
 			$values_array[] = "(?, ?)";
 		}
 
-		$query = "INSERT INTO computer_tags (computer_id, tag_id) VALUES ".implode(", ", $values_array);
+		$query = "	INSERT INTO 
+						computer_tags 
+							(computer_id, 
+							 tag_id) 
+					VALUES 
+						".implode(", ", $values_array);
 
 		$success_2 = $this->binary_query($query, $id_and_tags);
 
 		return $computer_id;
 	}
+
+	public function like($computer_id) {
+		$query = "	INSERT INTO
+						computer_likes
+							(computer_id,
+							 liker_id)
+					VALUES
+						(?, ?)";
+
+		$user_id = Controller::get_user_id();
+
+		return $this->binary_query($query, array($computer_id, $user_id));
+	}
+
+	public function unlike($computer_id) {
+		$query = "	DELETE FROM
+						computer_likes
+					WHERE
+						computer_id=?
+						AND liker_id=?";
+
+		$user_id = Controller::get_user_id();
+
+		return $this->binary_query($query, array($computer_id, $user_id));
+	}
+
+	public function get_likes() {
+		$query = "	SELECT
+						computer_id
+					FROM
+						computer_likes
+					WHERE
+						liker_id=?
+					ORDER BY 
+						computer_id";
+
+		$user_id = Controller::get_user_id();
+
+		return $this->return_query($query, array($user_id));
+	}
+
+	public function get_computers() {
+			// Get all computers
+			$query = "	SELECT
+							comps.computer_id,
+							comps.name,
+							CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu_model,
+							CONCAT(gpu_makers.name, ' ', gpus.model) AS gpu_model,
+							COUNT(likes.computer_id) AS count,
+							users.email
+						FROM
+							users,
+							cpus,
+							cpu_makers,
+							gpus,
+							gpu_makers,
+							computers AS comps
+  							LEFT JOIN 
+  								computer_likes AS likes 
+  								ON comps.computer_id = likes.computer_id
+						WHERE
+							comps.cpu_id IS NOT NULL
+							AND users.user_id = comps.builder_id
+							AND comps.cpu_id = cpus.cpu_id
+							AND cpus.maker_id = cpu_makers.maker_id
+							AND comps.gpu_id = gpus.gpu_id
+							AND gpus.maker_id = gpu_makers.maker_id
+                        GROUP BY
+                        	comps.computer_id
+                        ORDER BY
+                        	comps.computer_id
+						LIMIT
+							500";
+
+			return $this->return_query($query);
+		}
 }

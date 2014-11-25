@@ -68,6 +68,23 @@ html {
   width: 88%;
 }
 
+table, th, td {
+   border: 1px solid black;
+} 
+
+th, td{
+  padding: 3px;
+}
+
+th {
+  background-color: #CCC;
+}
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
 nav {
   /* Size */
   position: fixed;

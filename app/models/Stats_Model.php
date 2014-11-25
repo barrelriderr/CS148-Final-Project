@@ -104,7 +104,8 @@ class Stats_Model extends Model {
 	}
 
 	// List of most popular CPUs
-	public function get_top_5_cpus() {
+	public function get_top_cpus($count = 5) {
+
 		$query = "	SELECT 
 						COUNT(computer_id) AS count,
 						comp.cpu_id, 
@@ -124,9 +125,54 @@ class Stats_Model extends Model {
 					ORDER BY 
 						count DESC 
 					LIMIT 
-						5";
+						$count";
 
-		return $this->return_query($query);
+
+		return $this->return_query($query, array($count));
+	}
+
+	// List of most popular CPUs
+	public function get_top_colors($count = 5) {
+		
+		$query = "	SELECT 
+						COUNT(computer_id) AS count,
+						colors.color
+					FROM 
+						computers AS comp, 
+						colors
+					WHERE 
+                    	comp.color = colors.color_id
+					GROUP BY 
+						comp.color 
+					ORDER BY 
+						count DESC 
+					LIMIT 
+						$count";
+
+		return $this->return_query($query, array($count));
+	}
+
+	public function get_top_computers($count = 5) {
+		
+		$query = "	SELECT
+						COUNT(likes.computer_id) AS count,
+						comps.name AS name,
+						email
+					FROM
+						users,
+						computers AS comps,
+						computer_likes AS likes
+					WHERE
+						comps.computer_id = likes.computer_id
+						AND comps.builder_id = users.user_id
+					GROUP BY
+						likes.computer_id
+					ORDER BY
+						count DESC
+					LIMIT
+						$count";
+
+		return $this->return_query($query, array($count));
 	}
 
 	// idk...

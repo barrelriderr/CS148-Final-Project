@@ -5,6 +5,7 @@ class Computer_Controller extends Controller{
 	public static $input = [];
 	private static $tag_list = [];
 	private static $color_list = [];
+	public static $computer_list;
 
 	public function __construct() { }
 
@@ -123,7 +124,7 @@ class Computer_Controller extends Controller{
 		echo $html;
 	}
 
-	public function delete(){
+	public function delete() {
 		$computer_id = intval($_GET['id']);
 
 		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
@@ -139,5 +140,78 @@ class Computer_Controller extends Controller{
 		}else {
 			View::make('add/delete_computer');
 		}
+	}
+
+	public function like() {
+		$computer_id = intval($_GET['id']);
+
+		if ($computer_id > 0) {
+			require("../app/models/Computer_Model.php");
+			$this->model = new Computer_Model();
+
+			$this->model->like($computer_id);
+		}
+		
+		View::redirect('browse');
+	}
+
+	public function unlike() {
+		$computer_id = intval($_GET['id']);
+
+		if ($computer_id > 0) {
+			require("../app/models/Computer_Model.php");
+			$this->model = new Computer_Model();
+
+			$this->model->unlike($computer_id);
+		}
+		
+		View::redirect('browse');
+	}
+
+	public function browse() {
+		require("../app/models/Computer_Model.php");
+		$this->model = new Computer_Model();
+
+		$computers = $this->model->get_computers();
+
+		if(Controller::is_signed_in()){
+			$user_likes = $this->model->get_likes();
+		}else {
+			$user_likes = [];
+		}
+
+		$html = "<tr><th>Name</th><th>Creator</th><th>CPU</th><th>GPU</th><th>Likes</th><th></th></tr>\n";
+
+		foreach ($computers as $key => $computer) {
+			$computer_id = $computer['computer_id'];
+			$name = $computer['name'];
+			$email = $computer['email'];
+			$cpu = $computer['cpu_model'];
+			$gpu = $computer['gpu_model'];
+			$likes = $computer['count'];
+
+			$creator = explode("@", $email);
+
+			$html .= "<tr><td>$name</td><td>$creator[0]</td><td>$cpu</td><td>$gpu</td><td>$likes</td><td>";
+
+			$like_html = "<a href='like.php?id=$computer_id'>like</a>";
+			
+			// Check if liked
+			$like_offset = 0;
+			for ($i=$like_offset; $i < count($user_likes); $i++) { 
+				$liked_computer = $user_likes[$i]['computer_id'];
+				if ($liked_computer == $computer_id){
+					$like_html = "<a href='unlike.php?id=$computer_id'>unlike</a>";
+					$like_offset++;
+					break;
+				}
+			}
+
+			$html .= $like_html."</td></tr>\n";
+		}
+
+		static::$computer_list = $html;
+
+		View::make('browse');
 	}
 }

@@ -28,8 +28,12 @@
   display: block;
 }
 
-#signout {
+ul {
 	float: right;
-  margin-right: 50px;
   display: block;
+  list-style: none;
+}
+
+ul li {
+  margin: 2px;
 }

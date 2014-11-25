@@ -8,8 +8,25 @@ View::head();
 <h3 style="text-align: center; color: #FA2828;">How Do You Stack Up?</h3>
 <p style="margin-right: 90px;">
     Add your own computer's hardware, style and name to our database. Simply <a href="register.php">create an account</a>
-    and start comparing and sharing your creations with other people's!
-</p>
+    and start comparing and sharing your creations with other people's!</p>
+
+<div class="left-section">
+    
+    <h3>Top Computers</h3>
+    <p>These are the 5 most popular computers.</p>
+    <table>
+    <?php echo Stats_Controller::$top_computers; ?>
+    </table>
+</div>
+
+<div class="right-section">
+    <h3>Top Computer Colors</h3>
+    <p>These are the 5 most popular color themes.</p>
+    <table>
+    <?php echo Stats_Controller::$top_colors; ?>
+    </table>
+</div>
+
 <h3>CPU Core Distribution</h3>
 <p>This chart shows how many cores each computer has in it's CPU.</p>
 <div class="legend">
@@ -57,7 +74,7 @@ var core_data = {
 </script>
 
 <h3>CPU Clock Speed Distribution</h3>
-<p>This chart shows the clock speeds of all computers.</p>
+<p>This chart shows the clock speeds of all computers. Note that a manufacturere may not make a CPU in some of the below clock speeds.</p>
 <div class="legend">
     <div class="legend-title">Legend</div>
     <div class="amd">AMD</div>
@@ -102,8 +119,6 @@ var speed_data = {
     ]
 };
 </script>
-
-
 
 <h3>Top CPUs</h3>
 <p>These are the 5 most popular CPUs</p>

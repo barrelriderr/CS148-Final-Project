@@ -6,6 +6,8 @@ class Stats_Controller extends Controller{
 	public static $cpu_speed_distribution = [];
 	public static $gpu_count = [];
 	public static $top_cpus;
+	public static $top_colors;
+	public static $top_computers;
 
 	public function index() {
 		require("../app/models/Stats_Model.php");
@@ -15,6 +17,8 @@ class Stats_Controller extends Controller{
 		$this->get_speed_distribution_data();
 		$this->get_gpu_count_data();
 		$this->get_top_cpus();
+		$this->get_top_colors();
+		$this->get_top_computers();
 
 		View::make('stats');
 	}
@@ -38,7 +42,7 @@ class Stats_Controller extends Controller{
 	}
 
 	private function get_top_cpus() {
-		$top_cpus = $this->model->get_top_5_cpus();
+		$top_cpus = $this->model->get_top_cpus(5);
 
 		$html = "<tr><th>Model</th><th>Cores</th><th>Speed</th><th>Users</th></tr>";
 
@@ -56,6 +60,39 @@ class Stats_Controller extends Controller{
 		}
 
 		static::$top_cpus = $html;
+	}
+
+	private function get_top_colors() {
+		$top_colors = $this->model->get_top_colors(5);
+
+		$html = "<tr><th>Color</th><th>Users</th></tr>";
+
+		foreach ($top_colors as $value) {
+			$color = $value['color'];
+			$users = $value['count'];
+
+			$html .= "<tr><td>$color</td><td>$users</td></tr>\n";
+		}
+
+		static::$top_colors = $html;
+	}
+
+	private function get_top_computers() {
+		$top_computers = $this->model->get_top_computers(5);
+
+		$html = "<tr><th>Computer</th><th>Creator</th><th>Likes</th></tr>";
+
+		foreach ($top_computers as $computer) {
+			$name = $computer['name'];
+			$email = $computer['email'];
+			$likes = $computer['count'];
+
+			$creator = explode("@", $email);
+
+			$html .= "<tr><td>$name</td><td>$creator[0]</td><td>$likes</td></tr>\n";
+		}
+
+		static::$top_computers = $html;
 	}
 
 	private function get_core_distribution_data() {

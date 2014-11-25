@@ -1,27 +1,30 @@
+.left-section {
+  float: left;
+  width: 50%;
+  height:150px;
+  margin-bottom: 60px;
+  display: block;
+}
+
+.right-section {
+  float: right;
+  width: 50%;
+  height: 150px;
+  margin-bottom: 60px;
+  display: block;
+}
+
+p, h3 {
+	padding-left: 15px;
+}
+
 canvas {
 	margin: 5px auto;
 	display: block;
 }
 
-h3 {
+h3:not(:first-child) {
 	margin-top: 40px;
-}
-
-table, th, td {
-   border: 1px solid black;
-} 
-
-th, td{
-	padding: 3px;
-}
-
-th {
-	background-color: #CCC;
-}
-
-table {
-	margin: 0 auto;
-	border-collapse: collapse;
 }
 
 .legend {
