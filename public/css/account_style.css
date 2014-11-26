@@ -27,13 +27,3 @@
   text-align: center;
   display: block;
 }
-
-ul {
-	float: right;
-  display: block;
-  list-style: none;
-}
-
-ul li {
-  margin: 2px;
-}

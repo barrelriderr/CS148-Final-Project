@@ -82,7 +82,9 @@ th {
 
 table {
   margin: 0 auto;
+  opacity: 0.9;
   border-collapse: collapse;
+  box-shadow:  0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 nav {

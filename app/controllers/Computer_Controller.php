@@ -21,7 +21,6 @@ class Computer_Controller extends Controller{
 
 		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 			$name = trim(htmlentities($_POST['name']));
-			$description = trim(htmlentities($_POST['description']));
 			$color_input = intval(trim(htmlentities($_POST['color'])));
 			$tags_input = $_POST['tags'];
 
@@ -35,14 +34,6 @@ class Computer_Controller extends Controller{
 			}
 
 			static::$input['name'] = $name;
-
-			if (strlen($description) > 60000) {
-				static::$error_messages['description'] = "Description is longer than 60,000 characters.";
-			}
-			
-			static::$input['description'] = $description;
-
-
 
 			if ($color_input != null) {
 				foreach (static::$color_list as $valid_color) {
@@ -71,13 +62,11 @@ class Computer_Controller extends Controller{
 			}
 
 			static::$input['name'] = $name;
-			static::$input['description'] = $description;
 
 			if (count(static::$error_messages) == 0) {				
 
 				$computer_id = $this->model->insert_computer(Controller::get_user_id(),
 															static::$input['name'],
-															static::$input['description'],
 															static::$input['color'],
 															static::$input['tags']
 															);

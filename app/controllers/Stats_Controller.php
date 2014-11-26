@@ -266,7 +266,7 @@ class Stats_Controller extends Controller{
 			}
 		}
 
-		$labels = '"' . implode('MHz", "', $speed_range) . '"';
+		$labels = '"' . implode('MHz", "', $speed_range) . 'MHz"';
 
 		$size_4_string = implode(', ', $size_4);
 		$size_8_string = implode(', ', $size_8);

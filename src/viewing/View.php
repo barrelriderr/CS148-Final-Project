@@ -51,7 +51,7 @@ abstract class View {
 	}
 
 	public function add_style($path) {
-		static::$stylesheets .= '<link media="screen" href="css/'.$path.'" rel="stylesheet"></link>'."\n";
+		static::$stylesheets .= '<link media="screen" href="css/'.$path.'" rel="stylesheet">'."\n";
 	}
 
 	public function add_script($path) {

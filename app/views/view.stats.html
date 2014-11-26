@@ -13,69 +13,70 @@ View::head();
     <a href="register.php"  class="good button" style="margin-top: 20px; margin-left: 50%;">Register</a>
 <p>
 
-<div class="left-section">
-    
-    <h3>Top Computers</h3>
-    <p>These are the 5 most popular computers.</p>
-    <table>
-    <?php echo Stats_Controller::$top_computers; ?>
-    </table>
-</div>
+<article>
+    <div class="left-section"> 
+        <h3>Top Computers</h3>
+        <p>These are the 5 most popular computers.</p>
+        <table>
+        <?php echo Stats_Controller::$top_computers; ?>
+        </table>
+    </div>
 
-<div class="right-section">
-    <h3>Top Computer Colors</h3>
-    <p>These are the 5 most popular color themes.</p>
-    <table>
-    <?php echo Stats_Controller::$top_colors; ?>
-    </table>
-</div>
+    <div class="right-section">
+        <h3>Top Computer Colors</h3>
+        <p>These are the 5 most popular color themes.</p>
+        <table>
+        <?php echo Stats_Controller::$top_colors; ?>
+        </table>
+    </div>
+</article>
+<article>
+    <h3>CPU Core Distribution</h3>
+    <p>This chart shows how many cores each computer has in it's CPU.</p>
+    <div class="legend">
+        <div class="legend-title">Legend</div>
+        <div class="amd legend-item">AMD</div>
+        <div class="intel legend-item">Intel</div>
+    </div>
+    <canvas id="cpu_core_distribution" class="radar_chart" width="400" height="400"></canvas>
+    <script>
+    <?php
+    $cpu_cores_data = Stats_Controller::$cpu_core_distribution;
 
-<h3>CPU Core Distribution</h3>
-<p>This chart shows how many cores each computer has in it's CPU.</p>
-<div class="legend">
-    <div class="legend-title">Legend</div>
-    <div class="amd legend-item">AMD</div>
-    <div class="intel legend-item">Intel</div>
-</div>
-<canvas id="cpu_core_distribution" class="radar_chart" width="400" height="400"></canvas>
-<script>
-<?php
-$cpu_cores_data = Stats_Controller::$cpu_core_distribution;
+    $labels = $cpu_cores_data['labels'];
 
-$labels = $cpu_cores_data['labels'];
+    $amd_data = $cpu_cores_data['amd_data'];
+    $intel_data = $cpu_cores_data['intel_data'];
 
-$amd_data = $cpu_cores_data['amd_data'];
-$intel_data = $cpu_cores_data['intel_data'];
+    ?>
 
-?>
-
-var core_data = {
-    labels: ["1 core",<?php echo $labels ?>],
-    datasets: [
-        {
-            label: "AMD CPUs",
-            fillColor: "rgba(240,40,60,0.2)",
-            strokeColor: "rgba(240,40,60,1)",
-            pointColor: "rgba(240,40,60,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#000",
-            pointHighlightStroke: "rgba(240,40,60,1)",
-            data: [0, <?php echo $amd_data ?>]
-        },
-        {
-            label: "Intel CPUs",
-            fillColor: "rgba(40,158,237,0.2)",
-            strokeColor: "rgba(40,158,237,1)",
-            pointColor: "rgba(40,158,237,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(40,158,237,1)",
-            data: [0, <?php echo $intel_data ?>]
-        }
-    ]
-};
-</script>
-
+    var core_data = {
+        labels: ["1 core",<?php echo $labels ?>],
+        datasets: [
+            {
+                label: "AMD CPUs",
+                fillColor: "rgba(240,40,60,0.2)",
+                strokeColor: "rgba(240,40,60,1)",
+                pointColor: "rgba(240,40,60,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#000",
+                pointHighlightStroke: "rgba(240,40,60,1)",
+                data: [0, <?php echo $amd_data ?>]
+            },
+            {
+                label: "Intel CPUs",
+                fillColor: "rgba(40,158,237,0.2)",
+                strokeColor: "rgba(40,158,237,1)",
+                pointColor: "rgba(40,158,237,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(40,158,237,1)",
+                data: [0, <?php echo $intel_data ?>]
+            }
+        ]
+    };
+    </script>
+</article>
 <h3>CPU Clock Speed Distribution</h3>
 <p>This chart shows the clock speeds of all computers. Note that a manufacturere may not make a CPU in some of the below clock speeds.</p>
 <div class="legend">
@@ -249,7 +250,7 @@ window.onload = function(){
     var cpu_speed_distribution_RadarChart = new Chart(cpu_speed_canvas).Radar(speed_data);
 
     var gpu_count_canvas = document.getElementById("gpu_count_distribution").getContext("2d");
-    var gpu_count_chart = new Chart(gpu_count_canvas).Pie(gpu_count_data);
+    var gpu_count_chart = new Chart(gpu_count_canvas).Doughnut(gpu_count_data);
 
     var ram_distribution_canvas = document.getElementById("ram_distribution").getContext("2d");
     var ram_distribution_chart = new Chart(ram_distribution_canvas).Bar(ram_distribution_data);

@@ -54,18 +54,17 @@ class Computer_Model extends Model {
 		return $this->binary_query($query, array($computer_id, $user_id));
 	}
 
-	public function insert_computer($builder_id, $name, $description, $color, $tags) {
+	public function insert_computer($builder_id, $name, $color, $tags) {
 
 		$query = '	INSERT INTO 
 						computers 
 							(builder_id,
 							 name, 
-							 description, 
 							 color) 
 					VALUES 
-						(?, ?, ?, ?)';
+						(?, ?, ?)';
 
-		$success = $this->binary_query($query, array($builder_id, $name, $description, $color));
+		$success = $this->binary_query($query, array($builder_id, $name, $color));
 
 		$last_insert = $this->last_insert();
 		$computer_id = $last_insert[0][0];
@@ -134,41 +133,7 @@ class Computer_Model extends Model {
 							comps.computer_id,
 							comps.name,
 							CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu_model,
-							CONCAT(gpu_makers.name, ' ', gpus.model) AS gpu_model,
-							COUNT(likes.computer_id) AS count,
-							users.username
-						FROM
-							users,
-							cpus,
-							cpu_makers,
-							gpus,
-							gpu_makers,
-							computers AS comps
-  							LEFT JOIN 
-  								computer_likes AS likes 
-  								ON comps.computer_id = likes.computer_id 
-  							LEFT JOIN
-  								gpus
-  								ON comps.gpu_id = gpus.gpu_id
-						WHERE
-							comps.cpu_id IS NOT NULL
-							AND users.user_id = comps.builder_id
-							AND comps.cpu_id = cpus.cpu_id
-							AND cpus.maker_id = cpu_makers.maker_id
-							AND comps.gpu_id = gpus.gpu_id
-							AND gpus.maker_id = gpu_makers.maker_id
-                        GROUP BY
-                        	comps.computer_id
-                        ORDER BY
-                        	comps.computer_id
-						LIMIT
-							500";
-
-			$query = "	SELECT
-							comps.computer_id,
-							comps.name,
-							CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu_model,
-							CONCAT(gpu_makers.name, ' ', gpus.model) AS gpu_model,
+							CONCAT(gpu_makers.name, ' ', gpus.model, ' x', comps.gpu_count) AS gpu_model,
 							COUNT(likes.computer_id) AS count,
 							users.username
 						FROM
@@ -193,7 +158,7 @@ class Computer_Model extends Model {
                         GROUP BY
                         	comps.computer_id
                         ORDER BY
-                        	comps.computer_id
+                        	count DESC
 						LIMIT
 							500";
 

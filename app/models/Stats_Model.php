@@ -156,6 +156,34 @@ class Stats_Model extends Model {
 		return $this->return_query($query, array($count));
 	}
 
+	//NOT DONE
+	public function get_top_gpus($count = 5) {
+
+		$query = "	SELECT 
+						COUNT(computer_id) AS count,
+						comp.gpu_id, 
+						CONCAT(cpu_makers.name, ' ', cpus.model) AS model,
+						cpus.cores,
+						cpus.clock_speed AS speed
+					FROM 
+						computers AS comp, 
+						cpus,
+						cpu_makers
+					WHERE 
+                    	comp.cpu_id = cpus.cpu_id
+                        AND cpus.maker_id = cpu_makers.maker_id
+						AND comp.cpu_id IS NOT NULL 
+					GROUP BY 
+						comp.cpu_id 
+					ORDER BY 
+						count DESC 
+					LIMIT 
+						$count";
+
+
+		return $this->return_query($query, array($count));
+	}
+
 	// List of most popular CPUs
 	public function get_top_colors($count = 5) {
 		

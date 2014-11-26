@@ -18,18 +18,20 @@ View::head();
 		<div style="height: 120px; overflow: scroll;">
 		<?php User_Controller::make_computer_list(User_Controller::$computer_list); ?>
 		</div>
-		<div style="height: 120px; overflow: scroll;">
-		<?php echo (User_Controller::$unfinished_computer_list != null) ? "<h3>Unfinished Computers</h3>" : "";
+		<?php 
+			echo (User_Controller::$unfinished_computer_list != null) ? '<div style="height: 120px; overflow: scroll;"><h3>Unfinished Computers</h3>' : "";
 			User_Controller::make_computer_list(User_Controller::$unfinished_computer_list);
+			echo (User_Controller::$unfinished_computer_list != null) ? "</div>" : "";
 		 ?>
-		 </div>
 	</div>
 </div>
 <div id="right-section">
-	<ul>
-		<li><a href="signout.php" class="danger button">Sign out</a></li>
-		<li><a href="addComputer.php" class="good button">Add Computer</a></li>
-		<li><a href="browse.php" class="good button">Browse</a></li>
+	<ul style="float: right;
+  display: block;
+  list-style: none;">
+		<li style="margin: 2px;"><a href="signout.php" class="danger button">Sign out</a></li>
+		<li style="margin: 2px;"><a href="addComputer.php" class="good button">Add Computer</a></li>
+		<li style="margin: 2px;"><a href="browse.php" class="good button">Browse</a></li>
 	<?php  
 		if(Controller::is_admin()) {
 			echo "<br><br><li style='text-align: center;'>Admin Tools</li>";
