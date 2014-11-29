@@ -27,7 +27,7 @@ class Hardware_Controller extends Controller{
 	}
 
 	public function add() {
-		$computer_id = filter_input(INPUT_GET, "bid", FILTER_VALIDATE_INT);
+		$computer_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
 		// Get Computer Name
 		if (isset($computer_id)){
@@ -150,6 +150,11 @@ class Hardware_Controller extends Controller{
 
 			View::make('add/add_hardware');
 		}
+	}
+
+	public function new_hardware() {
+
+		View::make('admin/edit_hardware');
 	}
 
 	public static function make_cpu_list($make) {

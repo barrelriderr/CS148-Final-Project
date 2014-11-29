@@ -88,11 +88,12 @@ class Stats_Controller extends Controller{
 		$html = "<tr><th>Computer</th><th>Creator</th><th>Likes</th></tr>";
 
 		foreach ($top_computers as $computer) {
+			$computer_id = $computer['computer_id'];
 			$name = $computer['name'];
 			$username = $computer['username'];
 			$likes = $computer['count'];
 
-			$html .= "<tr><td>$name</td><td>$username</td><td>$likes</td></tr>\n";
+			$html .= "<tr><td><a href='viewComputer.php?id=$computer_id'>$name</a></td><td>$username</td><td>$likes</td></tr>\n";
 		}
 
 		static::$top_computers = $html;

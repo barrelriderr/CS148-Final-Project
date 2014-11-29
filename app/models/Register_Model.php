@@ -30,7 +30,13 @@ class Register_Model extends Model {
 	}
 
 	public function insert_user($username, $email, $password) {
-		$query = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+		$query = "	INSERT INTO 
+						users 
+							(username,
+							 email, 
+							 password) 
+					VALUES 
+							(?, ?, ?)";
 
 		$success = $this->binary_query($query, array($username, $email, $password));
 
@@ -43,7 +49,13 @@ class Register_Model extends Model {
 
 		$user_id = $user_id[0][0];
 
-		$query = "SELECT date_joined FROM users WHERE user_id=? AND confirmed IS NULL";
+		$query = "	SELECT 
+						date_joined 
+					FROM 
+						users 
+					WHERE 
+						user_id=? 
+						AND confirmed IS NULL";
 
 		$results= $this->return_query($query, array($user_id));
 

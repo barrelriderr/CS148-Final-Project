@@ -6,6 +6,9 @@ class Computer_Controller extends Controller{
 	private static $tag_list = array();
 	private static $color_list = array();
 	public static $computer_list;
+	// Used for computer view
+	public static $computer_info;
+	public static $is_current_users_computer = false;
 
 	public function __construct() { }
 
@@ -21,6 +24,7 @@ class Computer_Controller extends Controller{
 
 		if ($_SERVER["REQUEST_METHOD"] == 'POST') {
 			$name = trim(htmlentities($_POST['name']));
+			$description = trim(htmlentities($_POST['description']));
 			$color_input = intval(trim(htmlentities($_POST['color'])));
 			$tags_input = $_POST['tags'];
 
@@ -35,6 +39,12 @@ class Computer_Controller extends Controller{
 
 			static::$input['name'] = $name;
 
+			if(strlen($description) > 60000) {
+				static::$error_messages['description'] = "Description is longer than 60 000 characters.";
+			}
+
+			static::$input['description'] = $description;
+
 			if ($color_input != null) {
 				foreach (static::$color_list as $valid_color) {
 					if ($valid_color['color_id'] == $color_input) {
@@ -43,6 +53,27 @@ class Computer_Controller extends Controller{
 					}
 				}
 			}
+
+			// Check if image file is a actual image or fake image
+		    $check = getimagesize($_FILES["image_upload"]["tmp_name"]);
+		    
+		    if($check !== false) {
+
+				// Check file size
+				if ($_FILES["image_upload"]["size"] > 200000000) {
+					static::$error_messages['upload'] = "Image must be less than 2MB";
+				}
+	
+				$img_extension = pathinfo($_FILES["image_upload"]["name"],PATHINFO_EXTENSION);
+
+				// Allow certain file formats
+				if($img_extension != "jpg" && $img_extension != "png" && $img_extension != "jpeg" && $img_extension != "gif" ) {
+					static::$error_messages['upload'] = "Only JPEG, PNG and GIF file types allowed.";
+				} 
+
+		    } else {
+		        static::$error_messages['upload'] = "Not an Image!";
+		    }
 
 			if (static::$input['color'] == null) {
 				static::$error_messages['color'] = "Please select a valid color.";
@@ -67,10 +98,17 @@ class Computer_Controller extends Controller{
 
 				$computer_id = $this->model->insert_computer(Controller::get_user_id(),
 															static::$input['name'],
+															static::$input['description'],
 															static::$input['color'],
 															static::$input['tags']
 															);
-				if ($computer_id) {
+				$target_dir = "../lib/user_uploads/";
+
+				$target_file = $this->model->new_image($computer_id, $img_extension);
+
+			    move_uploaded_file($_FILES["image_upload"]["tmp_name"], $target_dir.$target_file.".".$img_extension);
+
+				if (!$computer_id) {
 					ob_end_clean(); // Destroy buffer
 					header("Location: addHardware.php?bid=$computer_id");
 					exit();
@@ -145,6 +183,18 @@ class Computer_Controller extends Controller{
 			$this->model->like($computer_id);
 		}
 		
+		$this->redirect_like();		
+	}
+
+	private function redirect_like() {
+		$computer_id = intval($_GET['id']);
+		$path = htmlentities($_GET['path']);
+
+		if ($path) {
+			View::redirect($path, "id=$computer_id");
+		}
+
+		// Default action
 		View::redirect('browse');
 	}
 
@@ -158,7 +208,7 @@ class Computer_Controller extends Controller{
 			$this->model->unlike($computer_id);
 		}
 		
-		View::redirect('browse');
+		$this->redirect_like();
 	}
 
 	public function browse() {
@@ -188,7 +238,7 @@ class Computer_Controller extends Controller{
 
 			$likes = $computer['count'];
 
-			$html .= "<tr><td>$name</td><td>$username</td><td>$cpu</td><td>$gpu</td><td>$likes</td><td>";
+			$html .= "<tr><td><a href='viewComputer.php?id=$computer_id'>$name</a></td><td>$username</td><td>$cpu</td><td>$gpu</td><td>$likes</td><td>";
 
 			$like_html = "<a href='like.php?id=$computer_id'>like</a>";
 			
@@ -209,5 +259,36 @@ class Computer_Controller extends Controller{
 		static::$computer_list = $html;
 
 		View::make('browse');
+	}
+
+	public function view_computer() {
+
+		require("../app/models/Computer_Model.php");
+		$this->model = new Computer_Model();
+
+		$computer_id = intval($_GET['id']);
+
+		if ($computer_id > 0) {
+			$results = $this->model->get_computer($computer_id);
+			$user_likes = $this->model->get_computer_like($computer_id);
+			
+			if ($results[0]['cpu_model'] == null) {
+				View::redirect("addHardware");
+			}else {
+
+				static::$computer_info = $results[0];
+				static::$computer_info['user_likes'] = $user_likes;
+
+				if (!file_exists("../lib/user_uploads/".$results[0]['image'])) {
+					static::$computer_info['image'] = "noimage.jpg";
+				}
+
+				if ($results[0]['user_id'] == Controller::get_user_id()) {
+					static::$is_current_users_computer = true;
+				}
+
+				View::make("view_computer", "id=$computer_id");
+			}
+		}
 	}
 }

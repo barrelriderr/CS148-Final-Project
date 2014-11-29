@@ -1,0 +1,39 @@
+<?php 
+$computer_info = Computer_Controller::$computer_info;
+
+$user_likes = $computer_info['user_likes'];
+$name = htmlentities($computer_info['name']);
+$description = htmlentities($computer_info['description']);
+$computer_id = $computer_info['computer_id'];
+$cpu = htmlentities($computer_info['cpu_model']);
+$gpu = htmlentities($computer_info['gpu_model']);
+$ram = htmlentities($computer_info['ram']);
+$image = htmlentities($computer_info['image']);
+$likes = htmlentities($computer_info['count']);
+$creator = htmlentities($computer_info['username']);
+
+View::$title = htmlentities($computer_info['name']);
+View::head();
+?>
+<h1><?php echo htmlentities($computer_info['name']); ?></h1>
+<article>
+
+<div class="left-section">
+<img  style="width: 90%; margin: 0 10px; border: 1px solid #000; box-shadow:  0 0 5px rgba(0, 0, 0, 0.3);" src="../lib/user_uploads/<?php echo ($image != null) ? $image : "noimage.jpg" ?>">
+	created by: <?php echo $creator ?>
+</div>
+<div class="right-section">
+	<?php echo ($description != null) ? "<h4>Description:</h4><br>\n<p style='height: 100px; overflow: scroll;'>".$description."</p>" : "" ?>
+	<h4>Specs:</h4>
+	<ul>
+		<li><?php echo $cpu ?></li>
+		<li><?php echo ($gpu != null)? $gpu : "No GPU" ?></li>
+		<li><?php echo $ram ?></li>
+		<li><?php echo $likes ?> likes</li>
+	</ul>
+</div>
+<?php echo (Computer_Controller::$is_current_users_computer) ? "<a href='addHardware.php?id=$computer_id' class='danger button'>Edit</a>" : "" ?>
+<?php 
+	echo '<a style="float: right; margin: 5px;"';
+	echo (!$user_likes) ? "href='like.php?id=$computer_id&path=viewComputer' class='good button'>Like</a>" : "href='unlike.php?id=$computer_id&path=viewComputer' class='good button'>Unlike</a>" ?>
+</article>

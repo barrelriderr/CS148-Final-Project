@@ -61,8 +61,7 @@ View::head();
     <fieldset>
         <?php 
         $id = Hardware_Controller::$computer_id;
-        $delete_html = "<a href='deleteComputer.php?id=$id' class='danger button'>DELETE</a>";
-        echo (Hardware_Controller::$finished_computer) ? $delete_html : ""
+        echo "<a href='deleteComputer.php?id=$id' class='danger button'>DELETE</a>";
         ?>
         <input type="submit" value="FINISH" class="good button"/>
     </fieldset>

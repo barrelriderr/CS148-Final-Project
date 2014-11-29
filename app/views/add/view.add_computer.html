@@ -3,7 +3,7 @@ View::$title = "Add Computer";
 View::head();
 ?>
 <h1>ADD COMPUTER</h1>
-<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" enctype="multipart/form-data">
     <?php 
         // ERRORS
         Controller::display_errors();
@@ -14,6 +14,11 @@ View::head();
     <fieldset>
     <legend>Computer</legend>
         <input type="text" placeholder="Computer Name" name="name" value="<?php echo $input['name'] ?>"/><br>
+        <textarea name="description" placeholder="Tell us more about your computer..." rows="4" cols="45"><?php echo $input['name'] ?></textarea>
+    </fieldset>
+    <fieldset>
+    <legend>Image</legend>
+        Upload Image: <input type="file" name="image_upload" id="image_upload">
     </fieldset>
     <fieldset>
     <legend>Details</legend>

@@ -47,4 +47,30 @@ class Admin_Model extends Model {
 
 		return $this->binary_query($query, array($user_id));
 	}
+
+	public function new_cpu($maker_id, $model, $speed, $cores) {
+		$query = "	INSERT INTO 
+						cpus 
+							(maker_id,
+							 model, 
+							 clock_speed,
+							 cores) 
+					VALUES 
+							(?, ?, ?, ?)";
+
+		return $this->return_query($query, array($maker_id, $model, $speed, $cores));
+	}
+
+	public function new_gpu($maker_id, $series, $model, $suffix) {
+		$query = "	INSERT INTO 
+						gpus 
+							(maker_id,
+							 series, 
+							 model,
+							 suffix) 
+					VALUES 
+							(?, ?, ?, ?)";
+
+		return $this->return_query($query, array($maker_id, $series, $model, $suffix));
+	}
 }

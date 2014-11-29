@@ -90,7 +90,7 @@ class User_Controller extends Controller {
 		$html = "<ol>\n";
 
 		foreach ($list as $value) {
-			$html .= '<li><a href="addHardware.php?bid='.$value['computer_id'].'">'.$value['name']."</a></li>\n";
+			$html .= '<li><a href="viewComputer.php?id='.$value['computer_id'].'">'.$value['name']."</a></li>\n";
 		}
 
 		$html .= "</ol>\n";
