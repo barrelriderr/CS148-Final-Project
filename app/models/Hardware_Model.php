@@ -1,5 +1,7 @@
 <?php
 
+
+
 class Hardware_Model extends Model {
 
 	public function __construct() {
@@ -23,9 +25,29 @@ class Hardware_Model extends Model {
 		return $this->binary_query($query, $computer_specs);
 	}
 
+	public function update_computer($computer_specs) {
+		$query = "	UPDATE 
+						computers 
+					SET 
+						description=?,
+						cpu_id=?, 
+						gpu_id=?, 
+						gpu_count=?, 
+						ram_speed=?, 
+						ram_size=? 
+					WHERE 
+						computer_id=? 
+						AND builder_id=?";
+
+		$computer_specs[] = Controller::get_user_id();
+
+		return $this->return_query($query, $computer_specs);
+	}
+
 	public function get_hardware($computer_id) {
 
 		$query = "	SELECT
+						computers.description,
 						computers.cpu_id,
 						computers.gpu_id,
 						gpu_count,

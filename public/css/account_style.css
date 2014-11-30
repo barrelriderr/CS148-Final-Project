@@ -16,14 +16,3 @@
   float: right;
   width: 50%;
 }
-
-#success {
-  font-size: 1.5em;
-  color: #FFF;
-  background: #1BF21B;
-  padding: 5px 10px;
-  max-width: 100px;
-  margin 10px auto;
-  text-align: center;
-  display: block;
-}

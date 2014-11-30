@@ -1,8 +1,12 @@
-ul {
+#container {
+	min-width: 700px;
+}
+
+#comment-section ul {
 	list-style: none;
 }
 
-ul li.comment {
+#comment-section ul li.comment {
 	position: relative;
 	/*border: 1px solid #000;*/
 	padding: 5px;
@@ -10,7 +14,7 @@ ul li.comment {
 	width: 90%;
 }
 
-ul li.reply {
+#comment-section ul li.reply {
 	position: relative;
 	/*border: 1px solid #000;*/
 	padding: 5px 5px 5px 40px;
@@ -67,4 +71,31 @@ ul li.reply {
 .delete-link {
 	color: #FA2828;
 	margin-left: 10px;
+}
+
+#images { 
+	position: relative; 
+	overflow: auto;
+	box-shadow:  0 0 5px rgba(0, 0, 0, 0.3);
+	border: 1px solid #000; 
+	height: 300px;
+	min-width: 400px;
+	width: 100%;
+}
+#images ul {
+	padding: 0;
+}
+#images li { 
+	list-style: none;
+	background-color: rgba(0, 0, 0, 1);
+}
+
+#images img {
+	display: block;
+	height: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#images ul li { 
+	float: left; 
 }

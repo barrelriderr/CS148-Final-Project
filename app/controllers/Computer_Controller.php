@@ -109,9 +109,7 @@ class Computer_Controller extends Controller{
 			    move_uploaded_file($_FILES["image_upload"]["tmp_name"], $target_dir.$target_file.".".$img_extension);
 
 				if (!$computer_id) {
-					ob_end_clean(); // Destroy buffer
-					header("Location: addHardware.php?bid=$computer_id");
-					exit();
+					View::redirect("addHardware", "id=$computer_id");
 				}
 			}
 		}

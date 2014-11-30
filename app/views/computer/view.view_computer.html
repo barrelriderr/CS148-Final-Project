@@ -8,7 +8,7 @@ $computer_id = $computer_info['computer_id'];
 $cpu = htmlentities($computer_info['cpu_model']);
 $gpu = htmlentities($computer_info['gpu_model']);
 $ram = htmlentities($computer_info['ram']);
-$image = htmlentities($computer_info['image']);
+$images = $computer_info['images'];
 $likes = htmlentities($computer_info['count']);
 $creator = htmlentities($computer_info['username']);
 $comment_count = $computer_info['comment_count'];
@@ -16,18 +16,21 @@ $thread = Viewer_Controller::$thread;
 
 View::$title = htmlentities($computer_info['name']);
 View::add_style("viewer_style.css");
+View::add_script("unslider.js");
 View::head();
 ?>
 <h1>COMPUTER</h1>
 <article>
-<div class="left-section">
 <h3 style="padding-left: 10px; color: #FA2828;"><?php echo $name ?></h3>
-<img  style="width: 90%; margin: 0 10px; border: 1px solid #000; box-shadow:  0 0 5px rgba(0, 0, 0, 0.3);" alt="computer image" src="../lib/user_uploads/<?php echo ($image != null) ? $image : "noimage.jpg" ?>">
-	<span style="padding: 5px 20px; color: #666;">created by: <?php echo $creator ?></span>
+<div id="images">
+    <ul>
+        <?php echo $images ?>
+    </ul>
 </div>
-<div class="right-section" style="padding-top: 15px;">
-	<?php echo ($description != null) ? "<h4>Description:</h4><br>\n<p style='height: 100px; overflow: scroll;'>".$description."</p>" : "" ?>
-	<h4>Specs:</h4>
+<span style="padding: 5px 20px; color: #666;">created by: <?php echo $creator ?></span>
+<div id="specs">
+<?php echo ($description != null) ? "<h4 style='display: block; margin-top: 15px;'>Description:</h4><br>\n<p style='max-height: 100px; overflow: scroll;'>".$description."</p>" : "" ?>
+	<h4 style="display: block; margin-bottom: 15px;">Specs:</h4>
 	<ul>
 		<li><?php echo $cpu ?></li>
 		<li><?php echo ($gpu != null)? $gpu : "No GPU" ?></li>
@@ -35,7 +38,7 @@ View::head();
 		<li><?php echo $likes ?> likes</li>
 	</ul>
 	<div style="padding-left: 10px; width: 200px;">
-	<?php echo (Viewer_Controller::$is_current_users_computer) ? "<a href='addHardware.php?id=$computer_id' class='danger button'>Edit</a>" : "";
+	<?php echo (Viewer_Controller::$is_current_users_computer) ? "<a href='editComputer.php?id=$computer_id' class='danger button'>Edit</a>" : "";
 		echo '<a style="margin: 10px;"';
 		echo (!$user_likes) ? "href='like.php?id=$computer_id&path=viewComputer' class='good button'>Like</a>" : "href='unlike.php?id=$computer_id&path=viewComputer' class='good button'>Unlike</a>" ?>
 	</div>
@@ -46,13 +49,17 @@ View::head();
 	<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']).'?id='.intval($_GET['id']) ?>" method="POST">
 		<textarea name="comment-text" placeholder="Comment..." id="comment-box"></textarea>
 		<input type="submit" name="comment-submit" value="Comment" class="good button" id="comment-button" />
-		<ul style="margin-top: 20px;">
-			<?php echo $thread ?>
-		</ul>
+		<div id="comment-section">
+			<ul style="margin-top: 20px;">
+				<?php echo $thread ?>
+			</ul>
+		</div>
 		<input type="hidden" id="reply-id-value" name="reply-id-value" value="1">
 	</form>
 	
 	<script>
+
+		// Comment scripts
 		$(document).ready(function() {
 			$(".reply-box").hide();
 		});
@@ -73,6 +80,17 @@ View::head();
 			$( "#reply-"+comment_id ).slideDown( "slow", function() {
 				// Animation complete.
 			});
+		});
+
+
+		// Slider scripts
+		$('#images').unslider({
+			speed: 500,               //  The speed to animate each slide (in milliseconds)
+			delay: 5000,              //  The delay between slide animations (in milliseconds)
+			complete: function() {},  //  A function that gets called after every slide animation
+			keys: true,               //  Enable keyboard (left, right) arrow shortcuts
+			dots: true,               //  Display dot navigation
+			fluid: false              //  Support responsive design. May break non-responsive designs
 		});
 	</script>
 </article>

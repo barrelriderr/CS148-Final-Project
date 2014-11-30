@@ -1,0 +1,24 @@
+<?php
+View::$title = "Update Images";
+View::head();
+?>
+<h1>ADD COMPUTER</h1>
+<ol>
+    <?php echo Image_Controller::$image_list ?>
+</ol>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?id=".intval($_GET['id']) ?>" method="POST" enctype="multipart/form-data">
+    <?php 
+        // ERRORS
+        Controller::display_errors();
+
+        // Input
+        $input = Image_Controller::$input;
+    ?>
+    <fieldset>
+    <legend>Add Image</legend>
+        Upload Image: <input type="file" name="image_upload" id="image_upload">
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="ADD" class="good button"/>
+    </fieldset>
+</form>

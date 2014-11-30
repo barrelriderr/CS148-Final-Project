@@ -26,6 +26,147 @@ class Hardware_Controller extends Controller{
 
 	}
 
+	public function update() {
+		$computer_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+
+		// Get Computer Name
+		if (isset($computer_id)){
+			static::$computer_id = $computer_id;
+			$results = $this->model->get_computer($computer_id);
+
+			$computer = $results[0];
+
+			static::$computer_name = $computer['name'];
+
+			if ($computer['cpu_id'] == null) {
+				View::redirect("addHardware", "id=$computer_id");
+			}
+		}
+
+		if (static::$computer_name == null){
+			// Handle error
+			View::make('add/computer_not_found');
+
+		}else {
+
+			if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+
+				// DESCRIPTION VALIDATION
+				$description = trim(htmlentities($_POST['description']));
+
+				if(strlen($description) > 60000) {
+					static::$error_messages['description'] = "Description is longer than 60 000 characters.";
+				}
+
+				static::$input['description'] = $description;
+
+				// CPU VALIDATION
+				$cpu_make = intval($_POST['cpu_make']);
+
+				static::$input["cpu_make.".$cpu_make] = "selected";
+				$cpu_id = floatval($_POST[$cpu_make."_cpu"]);
+				static::$input["cpu_model"] = $cpu_id;
+
+				if ($cpu_make != 1 && $cpu_make != 2) {
+					static::$error_messages['cpu_make'] = "Please a CPU brand";
+				}
+
+				if (static::$input["cpu_model"] < 1) {
+					static::$error_messages['cpu_model'] = "Please select a CPU";
+				}
+
+
+				// GPU VALIDATION
+				$gpu_make = intval($_POST['gpu_make']);
+
+				if ($gpu_make == 1 || $gpu_make == 2) {
+					static::$input["gpu_make.".$gpu_make] = "selected";
+					$gpu_id = floatval(trim(htmlentities($_POST[$gpu_make."_gpu"])));
+					static::$input["gpu_model"] = $gpu_id;
+
+					$gpu_count = intval(trim(htmlentities($_POST["gpu_count"])));
+					if ($gpu_count < 1 || $gpu_count > 4)
+						$gpu_count = 1;
+					static::$input["gpu_count.$gpu_count"] = "checked";
+				}
+
+				// RAM VALIDATION
+				$ram_speed = intval($_POST['ram_speed']);
+				$ram_size = intval($_POST['ram_size']);
+
+
+				$ram_list = static::$ram_list;
+
+				// Check speed
+				$valid_speed = false;
+
+				foreach ($ram_list['speed'] as $value) {
+					if ($value['ram_id'] == $ram_speed){
+						$valid_speed = true;
+						break;
+					}
+				}
+
+				if (!$valid_speed)
+					static::$error_messages['ram_speed'] = "Please select a RAM speed";
+				else
+					static::$input['ram_speed'] = $ram_speed;
+
+				// Check size
+				$valid_size = false;
+
+				foreach ($ram_list['size'] as $value) {
+					if ($value['ram_id'] == $ram_size){
+						$valid_size = true;
+						break;
+					}
+				}
+
+				if (!$valid_size)
+					static::$error_messages['ram_size'] = "Please select a RAM size";
+				else
+					static::$input['ram_size'] = $ram_size;
+
+				if (count(static::$error_messages) == 0) {				
+					$computer_specs = array(
+										$description,
+										$cpu_id,
+										$gpu_id,
+										$gpu_count,
+										$ram_speed,
+										$ram_size,
+										$computer_id
+						);
+
+					if($this->model->update_computer($computer_specs)) {
+						View::redirect("account");
+					}
+				}
+			}else {
+				$old_hardware = $this->model->get_hardware(static::$computer_id);
+
+				$description = $old_hardware[0]['description'];
+				$cpu_make = $old_hardware[0]['cpu_maker'];
+				$gpu_make = $old_hardware[0]['gpu_maker'];
+				$gpu_count = $old_hardware[0]['gpu_count'];
+
+				static::$input['description'] = $description;
+
+				static::$input["cpu_make.$cpu_make"] = "selected";
+				static::$input["cpu_model"] = $old_hardware[0]['cpu_id'];
+
+				static::$input["gpu_make.$gpu_make"] = "selected";
+				static::$input["gpu_model"] = $old_hardware[0]['gpu_id'];
+				static::$input["gpu_count.$gpu_count"] = "checked";
+
+				static::$input['ram_speed'] = $old_hardware[0]['ram_speed'];
+				static::$input['ram_size'] = $old_hardware[0]['ram_size'];
+			}
+
+			View::make('computer/update_computer');
+		}
+	}
+
 	public function add() {
 		$computer_id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
@@ -35,10 +176,8 @@ class Hardware_Controller extends Controller{
 			$results = $this->model->get_computer($computer_id);
 			static::$computer_name = $results[0]['name'];
 
-			if ($results[0]['cpu_id'] == null) {
-				static::$finished_computer = false;
-			}else {
-				static::$finished_computer = true;
+			if ($results[0]['cpu_id'] != null) {
+				View::redirect('updateComputer', "id=$computer_id");
 			}
 		}
 
@@ -127,25 +266,9 @@ class Hardware_Controller extends Controller{
 										Controller::get_user_id()
 						);
 					if($this->model->add_hardware($computer_specs)) {
-						View::redirect("account", "success=1");
+						View::redirect("account");
 					}
 				}
-			}else if (static::$finished_computer == true) {
-				$old_hardware = $this->model->get_hardware(static::$computer_id);
-
-				$cpu_make = $old_hardware[0]['cpu_maker'];
-				$gpu_make = $old_hardware[0]['gpu_maker'];
-				$gpu_count = $old_hardware[0]['gpu_count'];
-
-				static::$input["cpu_make.$cpu_make"] = "selected";
-				static::$input["cpu_model"] = $old_hardware[0]['cpu_id'];
-
-				static::$input["gpu_make.$gpu_make"] = "selected";
-				static::$input["gpu_model"] = $old_hardware[0]['gpu_id'];
-				static::$input["gpu_count.$gpu_count"] = "checked";
-
-				static::$input['ram_speed'] = $old_hardware[0]['ram_speed'];
-				static::$input['ram_size'] = $old_hardware[0]['ram_size'];
 			}
 
 			View::make('add/add_hardware');

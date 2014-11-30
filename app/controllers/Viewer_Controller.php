@@ -1,11 +1,6 @@
 <?php
 
 class Viewer_Controller extends Controller{
-
-	public static $input = array();
-	private static $tag_list = array();
-	private static $color_list = array();
-	public static $computer_list;
 	// Used for computer view
 	public static $computer_info;
 	public static $is_current_users_computer = false;
@@ -21,18 +16,20 @@ class Viewer_Controller extends Controller{
 		$computer_id = intval($_GET['id']);
 
 		if ($computer_id > 0) {
-			$results = $this->model->get_computer($computer_id);
-			$user_likes = $this->model->get_computer_like($computer_id);
+			$result = $this->model->get_computer($computer_id);
+
+			$computer = $result[0];
 			
-			if ($results[0]['cpu_model'] == null) {
+			if ($computer['cpu_model'] == null) {
 				
 				// Unfinished computer
-				if ($results[0]['user_id'] == Controller::get_user_id()) {
+				if ($computer['user_id'] == Controller::get_user_id()) {
 					View::redirect("browse");
 				}else {
-					View::redirect("addHardware");
+					View::redirect("addHardware", "id=$computer_id");
 				}
 			}else {
+				$user_likes = $this->model->get_computer_like($computer_id);
 
 				if ($_SERVER["REQUEST_METHOD"] == 'POST' && Controller::is_signed_in()) {
 					// look for comment input and add to db
@@ -56,21 +53,49 @@ class Viewer_Controller extends Controller{
 					View::redirect("viewComputer", "id=$computer_id");
 				}
 
-				static::$computer_info = $results[0];
+				static::$computer_info = $computer;
+				static::$computer_info['images'] = $this->make_image_list();
+				static::$computer_info['user_likes'] = $user_likes;
 
-				if (!file_exists("../lib/user_uploads/".$results[0]['image'])) {
-					static::$computer_info['image'] = "noimage.jpg";
-				}
-
-				if ($results[0]['user_id'] == Controller::get_user_id()) {
+				if ($computer['user_id'] == Controller::get_user_id()) {
 					static::$is_current_users_computer = true;
 				}
 
 				static::$thread = $this->get_thread($computer_id);
 
-				View::make("view_computer", "id=$computer_id");
+				View::make("computer/view_computer", "id=$computer_id");
 			}
 		}
+	}
+
+	private function make_image_list() {
+		$computer_id = intval($_GET['id']);
+		$images = $this->model->get_images($computer_id);
+
+		$path = "../lib/user_uploads/";
+
+		if (count($images)==0) {
+			return "<li><img alt='computer image' src='$path"."noimage.jpg'></li>";
+		}
+
+
+		$html = "";
+
+		foreach ($images as $image) {	
+			$image_file = $path.$image['image'];
+
+			$html .= "<li><img alt='computer image' src='";
+
+			if (!file_exists($image_file)) {
+				$html .= $path."noimage.jpg";
+			}else {
+				$html .= $image_file;
+			}
+
+			$html .= "'></li>\n";
+		}
+
+		return $html;
 	}
 
 	private function get_thread($computer_id) {

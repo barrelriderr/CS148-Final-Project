@@ -40,8 +40,7 @@ class Viewer_Model extends Model {
 	                        CONCAT(ram_sizes.size_name, ' @ ', ram_speeds.speed,'MHz') AS ram,
 							COUNT(likes.computer_id) AS count,
 							users.username,
-							users.user_id,
-							CONCAT(computer_images.image_id,'.',computer_images.extension) AS image
+							users.user_id
 						FROM
 							users,
 							cpus,
@@ -49,18 +48,15 @@ class Viewer_Model extends Model {
 	                        ram_sizes,
 	                        ram_speeds,
 							computers AS comps
-								LEFT JOIN 
-									computer_likes AS likes 
-									ON comps.computer_id = likes.computer_id 
-								LEFT JOIN
-									gpus
-									ON comps.gpu_id = gpus.gpu_id
-								LEFT JOIN
-									gpu_makers
-									ON gpu_makers.maker_id = gpus.maker_id
-								LEFT JOIN
-									computer_images
-									ON computer_images.computer_id = comps.computer_id
+							LEFT JOIN 
+								computer_likes AS likes 
+								ON comps.computer_id = likes.computer_id 
+							LEFT JOIN
+								gpus
+								ON comps.gpu_id = gpus.gpu_id
+							LEFT JOIN
+								gpu_makers
+								ON gpu_makers.maker_id = gpus.maker_id
 						WHERE
 							users.user_id = comps.builder_id
 	                        AND comps.ram_speed = ram_speeds.ram_id
@@ -70,6 +66,18 @@ class Viewer_Model extends Model {
 							AND comps.computer_id = ?";
 
 			return $this->return_query($query, array($computer_id));
+	}
+
+	public function get_images($computer_id) {
+		$query = " 	SELECT
+						image_id,
+						CONCAT(computer_images.image_id,'.',computer_images.extension) AS image
+					FROM 
+						computer_images
+					WHERE
+						computer_id=?";
+
+		return $this->return_query($query, array($computer_id));
 	}
 
 	public function get_computer_like($computer_id) {

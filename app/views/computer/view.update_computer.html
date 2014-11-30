@@ -1,12 +1,10 @@
 <?php
-View::$title = "Add Hardware -".Hardware_Controller::$computer_name;
+View::$title = "Update -".Hardware_Controller::$computer_name;
 View::head();
 ?>
-<h1><?php echo (Hardware_Controller::$finished_computer) ? "UPDATE" : "ADD"?> HARDWARE</h1>
-<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?id=".Hardware_Controller::$computer_id ?>" method="POST" enctype="multipart/form-data">
-
-
-    <p>Please enter the hardware information for the computer that you just registered.</p>
+<h1>UPDATE COMPUTER</h1>
+<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?id=".Hardware_Controller::$computer_id ?>" method="POST">
+    <p>Update the following information. Edit this computers pictures <a href="editImages.php?id=<?php echo intval($_GET['id']) ?>">here</a></p>
     <?php 
         // ERRORS
         Controller::display_errors();
@@ -14,6 +12,9 @@ View::head();
         // Input
         $input = Hardware_Controller::$input;
     ?>
+    <legend>Computer</legend>
+        <textarea name="description" placeholder="Tell us more about your computer..." rows="4" cols="45"><?php echo $input['description'] ?></textarea>
+    </fieldset>
     <fieldset>
     <legend>CPU</legend>
         <select name="cpu_make" id="cpu" class="small">
