@@ -24,6 +24,7 @@ function waiting_cursor(text, count) {
 // 		});
 // });
 
-$(document).ready(function() {
-	waiting_cursor(document.getElementsByTagName("H1")[0].innerHTML, 0);
-});
+// Trigger underscore flash
+//$(document).ready(function() {
+	//waiting_cursor(document.getElementsByTagName("H1")[0].innerHTML, 0);
+//});

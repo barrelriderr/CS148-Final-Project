@@ -2,4 +2,4 @@
 
 require_once("top.php");
 
-get_controller("Computer", "view_computer");
+get_controller("Viewer", "view");

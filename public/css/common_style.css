@@ -353,11 +353,13 @@ fieldset:last-child a{
 .left-section {
   float: left;
   width: 50%;
+  margin-bottom: 10px;
 }
 
 .right-section {
   float: right;
   width: 50%;
+  margin-bottom: 10px;
 }
 
 #img-auth {

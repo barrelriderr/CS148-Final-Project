@@ -260,35 +260,4 @@ class Computer_Controller extends Controller{
 
 		View::make('browse');
 	}
-
-	public function view_computer() {
-
-		require("../app/models/Computer_Model.php");
-		$this->model = new Computer_Model();
-
-		$computer_id = intval($_GET['id']);
-
-		if ($computer_id > 0) {
-			$results = $this->model->get_computer($computer_id);
-			$user_likes = $this->model->get_computer_like($computer_id);
-			
-			if ($results[0]['cpu_model'] == null) {
-				View::redirect("addHardware");
-			}else {
-
-				static::$computer_info = $results[0];
-				static::$computer_info['user_likes'] = $user_likes;
-
-				if (!file_exists("../lib/user_uploads/".$results[0]['image'])) {
-					static::$computer_info['image'] = "noimage.jpg";
-				}
-
-				if ($results[0]['user_id'] == Controller::get_user_id()) {
-					static::$is_current_users_computer = true;
-				}
-
-				View::make("view_computer", "id=$computer_id");
-			}
-		}
-	}
 }

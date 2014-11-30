@@ -87,22 +87,6 @@ class Computer_Model extends Model {
 		return $computer_id;
 	}
 
-	public function get_computer_like($computer_id) {
-		$query = "	SELECT 
-						*
-					FROM
-						computer_likes
-					WHERE
-						computer_id=?
-						AND liker_id=?";
-
-		$has_liked = $this->return_query($query, array($computer_id, Controller::get_user_id()));
-
-		if ($has_liked) {
-			return true;
-		}
-		return false;
-	}
 
 	public function like($computer_id) {
 		$query = "	INSERT INTO
@@ -144,47 +128,7 @@ class Computer_Model extends Model {
 		return $this->return_query($query, array($user_id));
 	}
 
-	public function get_computer($computer_id) {
-		$query = "	SELECT 					
-						comps.computer_id,
-						comps.name,
-						comps.description,
-						CONCAT(cpu_makers.name, ' ', cpus.model) AS cpu_model,
-						CONCAT(gpu_makers.name, ' ', gpus.model, ' x', comps.gpu_count) AS gpu_model,
-                        CONCAT(ram_sizes.size_name, ' @ ', ram_speeds.speed,'MHz') AS ram,
-						COUNT(likes.computer_id) AS count,
-						users.username,
-						users.user_id,
-						CONCAT(computer_images.image_id,'.',computer_images.extension) AS image
-					FROM
-						users,
-						cpus,
-						cpu_makers,
-                        ram_sizes,
-                        ram_speeds,
-						computers AS comps
-							LEFT JOIN 
-								computer_likes AS likes 
-								ON comps.computer_id = likes.computer_id 
-							LEFT JOIN
-								gpus
-								ON comps.gpu_id = gpus.gpu_id
-							LEFT JOIN
-								gpu_makers
-								ON gpu_makers.maker_id = gpus.maker_id
-							LEFT JOIN
-								computer_images
-								ON computer_images.computer_id = comps.computer_id
-					WHERE
-						users.user_id = comps.builder_id
-                        AND comps.ram_speed = ram_speeds.ram_id
-                        AND comps.ram_size = ram_sizes.ram_id
-						AND comps.cpu_id = cpus.cpu_id
-						AND cpus.maker_id = cpu_makers.maker_id
-						AND comps.computer_id = ?";
-
-		return $this->return_query($query, array($computer_id));
-	}
+	
 
 	public function get_computers() {
 			// Get all computers
