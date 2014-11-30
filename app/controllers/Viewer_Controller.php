@@ -53,7 +53,7 @@ class Viewer_Controller extends Controller{
 						}
 					}
 
-					View::redirect("viewComputer", "id=$comment_id");
+					View::redirect("viewComputer", "id=$computer_id");
 				}
 
 				static::$computer_info = $results[0];
