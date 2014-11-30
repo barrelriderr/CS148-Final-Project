@@ -53,8 +53,7 @@ class Viewer_Controller extends Controller{
 						}
 					}
 
-					header("Location: viewComputer.php?id=$computer_id");
-					exit();
+					View::redirect("viewComputer", "id=$comment_id");
 				}
 
 				static::$computer_info = $results[0];
@@ -83,14 +82,26 @@ class Viewer_Controller extends Controller{
 		$start_index = 0;
 
 		foreach ($comments as $key => $comment) {
+
+			$comment_user_id = $comment['user_id'];
 			$username = $comment['username'];
 			$content = $comment['content'];
 			$comment_id = $comment['comment_id'];
 			$post_date = $comment['post_date'];
+			
+			$computer_id = static::$computer_info['computer_id'];
 
 			$post_date = $this->time_difference($post_date) . " ago";
 
-			$thread[] = "<li class='comment'><div class='author_head'><span class='comment_author'>$username</span><span class='comment_date'>$post_date</span></div>$content<div id='$comment_id' class='reply-link'>reply</div></li>";
+			$thread_string = "<li class='comment'><div class='author_head'><span class='comment_author'>$username</span><span class='comment_date'>$post_date</span></div>$content<br><span id='$comment_id' class='reply-link'>reply</span>";
+
+			if ($comment_user_id == Controller::get_user_id() || Controller::is_admin()) {
+				$thread_string .= "<a href='deleteComment.php?id=$computer_id&cid=$comment_id' class='delete-link'>Delete</a>";
+			}
+
+			$thread_string .= "</li>";
+
+			$thread[] = $thread_string;
 
 			for($i = $start_index; $i < count($replies); $i++) {
 				$reply = $replies[$i];
@@ -102,24 +113,71 @@ class Viewer_Controller extends Controller{
 
 				}else if ($comment_id == $this_comment_id) {
 
+					$reply_id = $reply['reply_id'];
+					$reply_user_id = $reply['user_id'];
 					$username = $reply['username'];
 					$content = $reply['reply'];
 					$post_date = $reply['post_date'];
 
 					$post_date = $this->time_difference($post_date) . " ago";
 
-					$thread[] = "<li class='reply'><div class='author_head'><span class='comment_author'>$username</span><span class='comment_date'>$post_date</span></div>$content</li>";
+					$thread_string = "<li class='reply'><div class='author_head'><span class='comment_author'>$username</span><span class='comment_date'>$post_date</span></div>$content";
+
+					if ($reply_user_id == Controller::get_user_id() || Controller::is_admin()) {
+						$thread_string .= "<br><a href='deleteComment.php?id=$computer_id&rid=$reply_id' class='delete-link' style='margin-left:0;'>Delete</a>";
+					}
+
+					$thread_string .= "</li>";
+
+					$thread[] = $thread_string;
 
 					$start_index++;
 				}
 			}
-			$thread[] = "<div id='reply-$comment_id' class='reply-box'><textarea placeholder='Reply' name='reply-text-$comment_id'></textarea><input type='submit' name='reply-submit' value='REPLY' class='good button reply-button' style='float:none;'/></div>";
+			$thread[] = "<div id='reply-$comment_id' class='reply-box'><textarea placeholder='Reply...' name='reply-text-$comment_id'></textarea><input type='submit' name='reply-submit' value='Reply' class='good button reply-button' style='float:none;'/></div>";
 
 		}
 
 		static::$computer_info['comment_count'] = count($replies) + count($comments);
 
 		return implode(" \n", $thread);
+	}
+
+	public function delete_comment() {
+
+		if (!empty($_GET['cid'])) {
+			require("../app/models/Viewer_Model.php");
+			$this->model = new Viewer_Model();
+
+			$id = intval($_GET['cid']);
+
+			if(Controller::is_admin()) {
+				$this->model->delete_comment_override($id);
+			}else {
+				$this->model->delete_comment($id);
+			}
+
+		}else if (!empty($_GET['rid'])) {
+			require("../app/models/Viewer_Model.php");
+			$this->model = new Viewer_Model();
+
+			$id = intval($_GET['rid']);
+
+			if(Controller::is_admin()) {
+				$this->model->delete_reply_override($id);
+			}else {
+				$this->model->delete_reply($id);
+			}
+
+		}
+
+		$computer_id = intval($_GET['id']);
+
+		if($computer_id){
+			View::redirect("viewComputer", "id=$computer_id");
+		}else {
+			View::redirect('browse');
+		}
 	}
 
 

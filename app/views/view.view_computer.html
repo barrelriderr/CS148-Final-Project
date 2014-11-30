@@ -59,15 +59,18 @@ View::head();
 
 
 		$( ".reply-link" ).click(function() {
-			var id = $(this).attr('id');
+			var comment_id = $(this).attr('id');
 			
-			$("#reply-id-value").val( id );
+			//Set hidden field value
+			$("#reply-id-value").val( comment_id );
 
-			$( ".reply-box" ).slideUp( "fast", function() {
-			// Animation complete.
-			});
+			if(!$('#reply-'+comment_id).is(':visible')) {
+				$( ".reply-box" ).slideUp( "fast", function() {
+				// Animation complete.
+				});
+			}
 
-			$( "#reply-"+id ).slideDown( "slow", function() {
+			$( "#reply-"+comment_id ).slideDown( "slow", function() {
 				// Animation complete.
 			});
 		});

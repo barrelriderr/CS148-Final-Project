@@ -89,8 +89,51 @@ class Viewer_Model extends Model {
 		return false;
 	}
 
+	public function delete_comment_override($id) {
+		$query = "	DELETE FROM 
+						computer_comments
+					WHERE
+						comment_id=?";
+
+		return $this->binary_query($query, array($id));
+	}
+
+	public function delete_comment($id) {
+		$query = "	DELETE FROM 
+						computer_comments
+					WHERE
+						comment_id=?
+						AND commenter=?";
+
+		$commenter = Controller::get_user_id();
+
+		return $this->binary_query($query, array($id, $commenter));
+	}
+
+	public function delete_reply_override($id) {
+		$query = "	DELETE FROM 
+						comment_replies
+					WHERE
+						reply_id=?";
+
+		return $this->binary_query($query, array($id));
+	}
+
+	public function delete_reply($id) {
+		$query = "	DELETE FROM 
+						comment_replies
+					WHERE
+						reply_id=?
+						AND replier=?";
+
+		$replier = Controller::get_user_id();
+
+		return $this->binary_query($query, array($id, $replier));
+	}
+
 	public function get_comments($computer_id) {
 		$query = "	SELECT
+						user_id,
 						username,
 						comment_id,
 						content,
@@ -107,6 +150,7 @@ class Viewer_Model extends Model {
 
 	public function get_replies($computer_id) {
 		$query = "	SELECT
+						user_id,
 						username,
 						comment_id,
 						reply_id,
